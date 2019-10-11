@@ -1,18 +1,18 @@
 package game.buttons;
 
 import ddf.minim.AudioSample;
+import game.Theme;
 import game.TicTacToe;
 import game.TicTacToe.Difficulty;
 import game.screens.MenuScreen.Menu;
 import game.screens.Screen.ScreenType;
-import processing.core.PApplet;
 import processing.core.PConstants;
 
 public class MenuOption extends Button
 {
-    public MenuOption(PApplet parent, int x, int y, AudioSample sound)
+    public MenuOption(TicTacToe game, int x, int y, AudioSample sound)
     {
-        super(parent);
+        super(game);
         setButtonType(ButtonType.MENU);
         setWidth(190);
         setHeight(30);
@@ -20,28 +20,37 @@ public class MenuOption extends Button
         setYcoord(y);
         setSound(sound);
     }
+    
+    @Override
+    protected void updateSound()
+    {
+        // TODO Auto-generated method stub
+        
+    }
 
     public void display(String label)
     {
         setLabel(label);
+        
         if (getHover())
         {
-            parent.fill(100, 100, 100);
+            game.fill(getFontHover());
         }
         else
         {
-            if (TicTacToe.difficulty.getLabel() == label)
+            if (game.getDifficulty().getLabel() == label || game.getTheme().getLabel() == label)
             {
-                parent.fill(250, 50, 50);
+                game.fill(getFontHighlight());
             }
             else
             {
-                parent.fill(255, 255, 255);
+                game.fill(getFontColor());
             }
         }
-        parent.textSize(32);
-        parent.text(getLabel(), getXcoord(), getYcoord());
-        parent.rectMode(PConstants.CENTER);
+        
+        game.textSize(32*getFontSize()/100);
+        game.text(getLabel(), getXcoord(), getYcoord());
+        game.rectMode(PConstants.CENTER);
         //parent.rect(getXcoord() , getYcoord(), getWidth(), getHeight());
        
     }
@@ -64,46 +73,52 @@ public class MenuOption extends Button
         switch(label)
         {
         case "New Game":
-            TicTacToe.currentScreen = ScreenType.GAME;
-            TicTacToe.currentMenu = Menu.PAUSE;
+            game.changeScreen(ScreenType.GAME, Menu.PAUSE);
             //GameBoard.clear();
             break;
         case "Continue Game":
-            TicTacToe.currentScreen = ScreenType.GAME;
-            TicTacToe.currentMenu = Menu.PAUSE;
+            game.changeScreen(ScreenType.GAME, Menu.PAUSE);
             break;
         case "Main Menu":
-            TicTacToe.currentScreen = ScreenType.MENU;
-            TicTacToe.currentMenu = Menu.MAIN;
+            game.goMainMenu();
             break;
         case "Difficulty":
-            TicTacToe.previousMenu = TicTacToe.currentMenu;
-            TicTacToe.currentScreen = ScreenType.MENU;
-            TicTacToe.currentMenu = Menu.DIFFICULTY;
+            game.changeScreen(ScreenType.MENU, Menu.DIFFICULTY);
             break;
         case "Easy":
-            TicTacToe.difficulty = Difficulty.EASY;
+            game.setDifficulty(Difficulty.EASY);
             break;
         case "Medium":
-            TicTacToe.difficulty = Difficulty.MEDIUM;
+            game.setDifficulty(Difficulty.MEDIUM);
             break;
         case "Hard":
-            TicTacToe.difficulty = Difficulty.HARD;
+            game.setDifficulty(Difficulty.HARD);
             break;
         case "Settings":
+            game.changeScreen(ScreenType.MENU, Menu.SETTINGS);
+            break;
+        case "Themes":
+            game.changeScreen(ScreenType.MENU, Menu.THEMES);
+            break;
+        case "chalk":
+            game.updateCurrentTheme(Theme.CHALK);
+            break;
+        case "retro":
+            game.updateCurrentTheme(Theme.RETRO);
             break;
         case "Back":
-            TicTacToe.currentMenu = TicTacToe.previousMenu;
+            game.goBackScreen();
             break;
         case "Quit":
-            parent.exit();
+            game.exit();
             break;
         case "":
             break;
         default:
-            TicTacToe.currentScreen = ScreenType.INIT;
-            TicTacToe.currentMenu = Menu.MAIN;
+            game.changeScreen(ScreenType.INIT, Menu.MAIN);
             break;
         }
     }
+
+    
 }

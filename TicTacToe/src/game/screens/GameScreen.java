@@ -1,26 +1,31 @@
 package game.screens;
 
-import processing.core.PApplet;
-import processing.core.PImage;
+import game.TicTacToe;
 
 public class GameScreen extends Screen
 {
-    public GameScreen(PApplet parent, PImage foreground, PImage background)
+    public GameScreen(TicTacToe game)
     {
-        super(parent, background);
+        super(game);
         setType(ScreenType.GAME);
-        setForeground(foreground);
+        setForeground(game.getTheme().getGameForeground());
     }
 
     @Override
+    protected void updateForeground()
+    {
+        setForeground(game.getTheme().getGameForeground());        
+    } 
+    
+    @Override
     protected void displayForeground()
     {
-        setImage(330, 330);
+        displayForegroundImage(330, 330);
         displayButtons();
         
-        parent.fill(255, 255, 255);
-        parent.textSize(30);
-        parent.text("hit 'P' to pause game", getWidth()/2, 13*getHeight()/16);
+        game.fill(getFontColor());
+        game.textSize(30*getFontSize()/100);
+        game.text("hit 'P' to pause game", getWidth()/2, 13*getHeight()/16);
     }
     
     private void displayButtons()

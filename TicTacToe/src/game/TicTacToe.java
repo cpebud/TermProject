@@ -13,8 +13,8 @@ package game;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
-import ddf.minim.AudioSample;
 import ddf.minim.Minim;
 import game.buttons.MenuOption;
 import game.screens.DifficultyMenu;
@@ -26,9 +26,10 @@ import game.screens.MenuScreen.Menu;
 import game.screens.PauseMenu;
 import game.screens.Screen;
 import game.screens.Screen.ScreenType;
+import game.screens.SettingsMenu;
+import game.screens.ThemesMenu;
 import processing.core.PApplet;
-import processing.core.PFont;
-import processing.core.PImage;
+import util.Reference;
 
 
 /**
@@ -37,57 +38,46 @@ import processing.core.PImage;
  * 
  * @author  Garrett Cross, Omar Kermiche, Autumn Nguyen, Thomas Pridy
  * 
- * @version 0.0.1
+ * @version 0.3.0
  * @since   10/04/2019
  *
  */
 public class TicTacToe extends PApplet
 {   
-    /***************************************************************************
-     *      VARIABLES
-     **************************************************************************/
-    
-    public static final int WIDTH  = 600;   // Applet CONSTANT width
-    public static final int HEIGHT = 800;   // Applet CONSTANT height
-    
-    /*   Fonts    */    
-    PFont font;                             // Font of text throughout applet
-    
-    /*   Images   */
-    PImage background;                      // Background image throughout applet
-    PImage initForeground;                  // Initial startup screen
-    PImage menuForeground;                  // Menu image 
-    PImage gameForeground;                  // Image during game play
-    //PImage winForeground;                   // Image when player wins game
-    //PImage lossForeground;                  // Image when player loses game
-    
-    /*   Sounds   */
-    Minim minim = new Minim(this);
-    AudioSample chalkX;
-    AudioSample chalkO;
-    AudioSample gameStart;
-    AudioSample menuClick;
-    public static Boolean soundsOn = true;
-    
-    /*   Current Screens   */
-    public static ScreenType currentScreen = ScreenType.INIT;     // Current screen of applet
-    public static Menu currentMenu = Menu.MAIN;                   // Current menu of applet
-    public static Menu previousMenu = Menu.MAIN;
-    
-    /*   Game Difficulty   */
-    public static Difficulty difficulty = Difficulty.EASY;
-    
-    /*   Themes   */
-    
-    
     // Creates the Processing Applet
     public static void main(String[] args)
     {
         PApplet.main("game.TicTacToe");
     }
+    /***************************************************************************
+     *      VARIABLES
+     **************************************************************************/
     
-    Map<String, Screen> screens = new HashMap<>();
-    public static MenuOption[] options = new MenuOption[MenuScreen.NUMBUTTONS];
+    private Theme currentTheme = Theme.CHALK;
+
+    /*   Current Screens   */
+    private Stack<ScreenType> currentScreens = new Stack<>();;
+    private ScreenType currentScreen;// = currentScreens.peek();     // Current screen of applet
+    
+    private Stack<Menu> currentMenus = new Stack<>();;
+    private Menu currentMenu;// = currentMenus.peek();                   // Current menu of applet
+    
+    /*   Game Difficulty   */
+    private Difficulty difficulty = Difficulty.EASY;
+        
+    
+    public Boolean soundsOn = true;
+
+    
+    Minim minim = new Minim(this);
+    
+    private Map<String, Screen> screens = new HashMap<>();
+    
+    
+    
+    private MenuOption[] options = new MenuOption[MenuScreen.NUMBUTTONS];
+    
+
     
     /***************************************************************************
      *      SETTINGS
@@ -95,7 +85,7 @@ public class TicTacToe extends PApplet
     /** Applet settings */
     public void settings()
     {
-        size(WIDTH, HEIGHT);
+        size(Reference.WIDTH, Reference.HEIGHT);
     }
     
     /***************************************************************************
@@ -104,16 +94,15 @@ public class TicTacToe extends PApplet
     /** Initial setup */
     public void setup()
     {
-        loadFonts();
-        loadImages();
-        loadSounds();
+        loadThemes();
+        loadScreens();
+        loadButtons();
         
-        screenInit();
+        currentScreens.push(ScreenType.INIT);
+        setCurrentScreen();
         
-        for (int i = 0; i < MenuScreen.NUMBUTTONS; i++)
-        {   
-            options[i] = new MenuOption(this, width/2, 310 + 45*i, menuClick);
-        }
+        currentMenus.push(Menu.MAIN);
+        setCurrentMenu();
     }
 
     /***************************************************************************
@@ -140,6 +129,10 @@ public class TicTacToe extends PApplet
                 screens.get("Difficulty").display();
                 break;
             case SETTINGS:
+                screens.get("Settings").display();
+                break;
+            case THEMES:
+                screens.get("Themes").display();
                 break;
             default:
                 break;
@@ -157,15 +150,16 @@ public class TicTacToe extends PApplet
     }
     
     /***************************************************************************
-     *      MOUSE FUNCTIONS
+     *      MOUSE/KEY FUNCTIONS
      **************************************************************************/
     /** Mouse button event */
     public void mousePressed()
     {
         if (currentScreen == ScreenType.INIT) 
         {
-            menuClick.trigger();
-            currentScreen = ScreenType.MENU;
+            //currentTheme.getMenuClick().trigger();
+            currentScreens.push(ScreenType.MENU);
+            setCurrentScreen();
         }
         else if (currentScreen == ScreenType.MENU)
         {
@@ -204,44 +198,132 @@ public class TicTacToe extends PApplet
     /***************************************************************************
      *      LOAD FUNCTIONS
      **************************************************************************/
-    /** Loads fonts. List all fonts here. */
-    private void loadFonts()
+    
+    private void loadThemes()
     {
-        font = createFont("data/fonts/Grafipaint.ttf", 30);
-        textFont(font);
-        textAlign(CENTER, CENTER);
-    }
-
-    /** Loads Images. List all images here */
-    private void loadImages()
-    {
-        background     = loadImage("data/images/chalkboard-background.png");
-        initForeground = loadImage("data/images/game-start.png");
-        menuForeground = loadImage("data/images/game-menu.png");
-        gameForeground = loadImage("data/images/game-board.png");
+        for (Theme theme : Theme.values())
+        {
+            theme.load(this, minim);
+        }
     }
     
-    /** Loads Images. List all sounds here */
-    private void loadSounds()
+    private void loadScreens()
     {
-        chalkX    = minim.loadSample("data/sounds/chalk-x.wav");
-        chalkO    = minim.loadSample("data/sounds/chalk-o.wav");
-        gameStart = minim.loadSample("data/sounds/game-start.wav");
-        menuClick = minim.loadSample("data/sounds/chalk-click.wav"); 
+        screens.put("Initial", new InitScreen(this));
+        screens.put("Main", new MainMenu(this));
+        screens.put("Game", new GameScreen(this));
+        screens.put("Pause", new PauseMenu(this));
+        screens.put("Difficulty", new DifficultyMenu(this));
+        screens.put("Settings", new SettingsMenu(this));
+        screens.put("Themes", new ThemesMenu(this));
+    }
+    
+    private void loadButtons()
+    {
+        for (int i = 0; i < MenuScreen.NUMBUTTONS; i++)
+        {   
+            options[i] = new MenuOption(this, width/2, 310 + 45*i, currentTheme.getMenuClick());
+        }
+    }
+    
+    /***************************************************************************
+     *      SETTERS/GETTERS
+     **************************************************************************/
+
+    public Theme getTheme()
+    {
+        return currentTheme;
+    }
+    
+    private void setCurrentScreen()
+    {
+        this.currentScreen = currentScreens.peek();
+    }
+    
+    public ScreenType getScreen()
+    {
+        return currentScreen;
+    }
+    
+    private void setCurrentMenu()
+    {
+        this.currentMenu = currentMenus.peek();
+    }
+    
+    public Menu getCurrentMenu()
+    {
+        return currentMenu;
+    }
+    
+    public void setDifficulty(Difficulty difficulty)
+    {
+        this.difficulty = difficulty;
+    }
+    
+    public Difficulty getDifficulty()
+    {
+        return difficulty;
+    }
+    
+    public MenuOption getOptions(int i)
+    {
+        return options[i];
     }
     
     /***************************************************************************
      *      OTHER FUNCTIONS
      **************************************************************************/
-
-    private void screenInit()
+    
+    public void changeScreen(ScreenType screen, Menu menu)
     {
-        screens.put("Initial", new InitScreen(this, initForeground, background));
-        screens.put("Main", new MainMenu(this, menuForeground, background));
-        screens.put("Game", new GameScreen(this, gameForeground, background));
-        screens.put("Pause", new PauseMenu(this, menuForeground, background));
-        screens.put("Difficulty", new DifficultyMenu(this, menuForeground, background));
+        currentScreens.push(screen);
+        setCurrentScreen();
+        
+        currentMenus.push(menu);
+        setCurrentMenu();
     }
+    
+    public void goMainMenu()
+    {
+        currentScreens.clear();
+        currentScreens.push(ScreenType.MENU);
+        setCurrentScreen();
+        
+        currentMenus.clear();
+        currentMenus.push(Menu.MAIN);
+        setCurrentMenu();
+    }
+    public void goBackScreen()
+    {
+        currentScreens.pop();
+        setCurrentScreen();
+        
+        currentMenus.pop();
+        setCurrentMenu();
+    }
+    
+    public void updateCurrentTheme(Theme theme)
+    {
+        this.currentTheme = theme;
+        updateTheme();
+    }
+    
+    private void updateTheme()
+    {
+        for (Screen screen : screens.values())
+        {
+            screen.update();
+        }
+        
+        for (MenuOption option : options)
+        {
+            option.update();
+        }
+    }
+    
+    /***************************************************************************
+     *      ENUMERATORS
+     **************************************************************************/
     
     public enum Difficulty
     {
@@ -260,5 +342,5 @@ public class TicTacToe extends PApplet
         {
             this.label = label;
         }
-    }
+    }  
 }

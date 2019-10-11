@@ -1,12 +1,18 @@
 package game.buttons;
 
 import ddf.minim.AudioSample;
-import processing.core.PApplet;
-
+import game.TicTacToe;
 public abstract class Button
 {   
-    PApplet parent;
-    ButtonType bType;
+    /***************************************************************************
+     *      VARIABLES
+     **************************************************************************/
+    
+    protected TicTacToe game;
+    private ButtonType bType;
+    
+    private String label;
+    private AudioSample sound;
     
     private int xCoord;
     private int yCoord;
@@ -14,19 +20,30 @@ public abstract class Button
     private int width;
     private int height;
     
-    private String label;
-    private AudioSample sound;
+    private int fontSize;
+    private int fontColor;
+    private int fontHover;
+    private int fontHighlight;
     
-    private Boolean hover;
     
-    public Button(PApplet parent) {
-        setParent(parent);
+    private Boolean hover = false;
+
+    /***************************************************************************
+     *      CONSTRUCTOR
+     **************************************************************************/
+    
+    public Button(TicTacToe game) {
+        this.game = game;
+        
+        this.fontSize      = game.getTheme().getFontSize();
+        this.fontColor     = game.getTheme().getFontColor();
+        this.fontHover     = game.getTheme().getFontHover();
+        this.fontHighlight = game.getTheme().getfontHighlight();
     }
     
-    private void setParent(PApplet parent)
-    {
-        this.parent = parent;
-    }
+    /***************************************************************************
+     *      SETTERS/GETTERS
+     **************************************************************************/
     
     protected void setButtonType(ButtonType bType)
     {
@@ -104,6 +121,26 @@ public abstract class Button
         return this.sound;
     }
     
+    public int getFontSize()
+    {
+        return fontSize;
+    }
+    
+    public int getFontColor()
+    {
+        return fontColor;
+    }
+    
+    public int getFontHover()
+    {
+        return fontHover;
+    }
+    
+    public int getFontHighlight()
+    {
+        return fontHighlight;
+    }
+    
     public void setHover(Boolean hover)
     {
         this.hover = hover;
@@ -114,9 +151,27 @@ public abstract class Button
         return this.hover;
     }
     
+    /***************************************************************************
+     *      METHODS
+     **************************************************************************/
+    public void update()
+    {
+        this.fontSize      = game.getTheme().getFontSize();
+        this.fontColor     = game.getTheme().getFontColor();
+        this.fontHover     = game.getTheme().getFontHover();
+        this.fontHighlight = game.getTheme().getfontHighlight();
+        updateSound();
+    }
+    
+    protected abstract void updateSound();
+    
     public abstract Boolean isInside(float mx, float my);
     
     public abstract void display(String label);
+    
+    /***************************************************************************
+     *      ENUMERATOR
+     **************************************************************************/
     
     public enum ButtonType
     {

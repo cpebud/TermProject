@@ -11,19 +11,19 @@
  ******************************************************************************/
 package game.screens;
 
-import processing.core.*;
+import game.TicTacToe;
 
 public class MainMenu extends MenuScreen
 {   
     private int i = 0;
-    public MainMenu(PApplet parent, PImage foreground, PImage background)
+    public MainMenu(TicTacToe game)
     {
-        super(parent, foreground, background);
+        super(game);
         setMenuType(Menu.MAIN);
         setMenuTitle();
         setLabel(i++, "New Game");
         setLabel(i++, "Difficulty");
         setLabel(i++, "Settings");
         setLabel(i++, "Quit");
-    }    
+    }  
 }

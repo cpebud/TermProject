@@ -13,49 +13,79 @@ package game.screens;
 
 import game.TicTacToe;
 import processing.core.*;
+import util.Reference;
 
 /**
  * Abstract <tt>Screen</tt> class. Represents a screen within the applet.
  * Used as base for all screens.
  * 
- * @author  Garrett Cross
+ * @author  Garrett Cross,
+ *          Omar Kermiche,
+ *          Autumn Nguyen,
+ *          Thomas Pridy
  * 
- * @version 1.0.0
+ * @version 1.1.0
  * @since   10/05/2019
  *
  */
 public abstract class Screen
 {   
-    PApplet    parent;         // Parent Applet
-    ScreenType type;           // Type of Screen
+    /***************************************************************************
+     *      VARIABLES
+     **************************************************************************/
+
+    protected TicTacToe game;            // Game client
     
+    private ScreenType type;           // Type of Screen
+    
+    /*   Font Features   */
+    private PFont font;
+    private int   fontSize;
+    private int   fontColor;
+    private int   fontHover;
+    private int   fontHighlight;
+    
+    /*   Image   */
     private PImage foreground; // Foreground image of screen
     private PImage background; // Background image of screen
         
-    private final int width  = TicTacToe.WIDTH;  // Screen width
-    private final int height = TicTacToe.HEIGHT; // Screen height
+    /*   CONSTANTS   */
+    private final int width  = Reference.WIDTH;  // Screen width
+    private final int height = Reference.HEIGHT; // Screen height
     
+    /***************************************************************************
+     *      CONSTRUCTOR
+     **************************************************************************/
+
     /**
      * Abstract <tt>Screen</tt> class represents a screen within the applet.
      * Used as base for all screens. 
      * 
-     * @param parent     : Parent applet
+     * @param game       : Game client
      * @param background : Background image for screen
      * 
      * @see Screen
      */
-    public Screen(PApplet parent, PImage background)
+    public Screen(TicTacToe game)
     {
-        setParent(parent);
-        setBackground(background);
+        this.game = game;
+        
+        this.font          = game.getTheme().getFont();
+        this.fontSize      = game.getTheme().getFontSize();
+        this.fontColor     = game.getTheme().getFontColor();
+        this.fontHover     = game.getTheme().getFontHover();
+        this.fontHighlight = game.getTheme().getfontHighlight();
+        
+        this.background    = game.getTheme().getBackground();
     }
     
-    /** Sets parent applet
-     * @param parent : parent applet
-     */
-    private void setParent(PApplet parent)
+    /***************************************************************************
+     *      SETTERS/GETTERS
+     **************************************************************************/
+
+    protected TicTacToe getGame()
     {
-        this.parent = parent;
+        return game;
     }
     
     /** Sets screen type 
@@ -73,20 +103,37 @@ public abstract class Screen
         return this.type;
     }
     
+    protected PFont getFont()
+    {
+        return font;
+    }
+    
+    protected int getFontSize()
+    {
+        return fontSize;
+    }
+      
+    protected int getFontColor()
+    {
+        return fontColor;
+    }
+    
+    protected int getFontHover()
+    {
+        return fontHover;
+    }
+    
+    protected int getFontHighlight()
+    {
+        return fontHighlight;
+    }
+    
     /** Sets foreground image
      * @param image : image to be set as foreground
      */
     protected void setForeground(PImage image)
     {
         this.foreground = image;
-    }
-    
-    /** Sets background image
-     * @param image : image to be set as background 
-     */
-    protected void setBackground(PImage image)
-    {
-        this.background = image;
     }
     
     public int getWidth()
@@ -99,12 +146,56 @@ public abstract class Screen
         return this.height;
     }
     
+    /***************************************************************************
+     *      METHODS
+     **************************************************************************/
+
+    public void update()
+    {
+        updateBackground();
+        updateForeground();
+    }
+    
+    private void updateBackground()
+    {
+        this.font          = game.getTheme().getFont();
+        this.fontSize      = game.getTheme().getFontSize();
+        this.fontColor     = game.getTheme().getFontColor();
+        this.fontHover     = game.getTheme().getFontHover();
+        this.fontHighlight = game.getTheme().getfontHighlight();
+
+        this.background = game.getTheme().getBackground();
+    }
+    
+    protected abstract void updateForeground();
+
     /** Displays the screen
      * @see Screen */
     public void display()
     {
         displayBackground();
         displayForeground();
+    }
+    
+        
+    /** Displays the background */
+    protected void displayBackground()
+    {
+        // Background Image
+        game.image(background, 0, 0, width, height);
+        
+        game.textFont(font);
+        game.textAlign(PConstants.CENTER, PConstants.CENTER);
+        game.fill(fontColor);
+
+        // Title Text
+        game.textSize(88*fontSize/100);
+        game.text(Reference.TITLE, width/2, height/7);
+        
+        // Copyright Text
+        game.textSize(14*fontSize/100);
+        game.text("Copyright © " + Reference.YEAR + " " + 
+                String.join(", ", Reference.AUTHORS), width/2, 27*height/30);
     }
     
     /** Displays the foreground */
@@ -118,31 +209,17 @@ public abstract class Screen
      * 
      * @see Screen
      */
-    protected void setImage(int imageWidth, int imageHeight)
+    protected void displayForegroundImage(int imageWidth, int imageHeight)
     {
         int imageX = (width - imageWidth)/2;
         int imageY = (height - imageHeight)/2;
         
-        parent.image(foreground, imageX, imageY, imageWidth, imageHeight);
+        game.image(foreground, imageX, imageY, imageWidth, imageHeight);
     }
-    
-    /** Displays the background */
-    protected void displayBackground()
-    {
-        // Background Image
-        parent.image(background, 0, 0, width, height);
-        
-        // Title Text
-        parent.fill(255, 255, 255);
-        parent.textSize(88);
-        parent.text("Tic-Tac-Toe", width/2, height/7);
-        
-        // Copyright Text
-        parent.fill(255, 255, 255);
-        parent.textSize(14);
-        parent.text("Copyright © 2019 by Garrett Cross, Omar Kermiche, Autumn Nguyen, Thomas Pridy",
-                width/2, 14*height/15);
-    }
+
+    /***************************************************************************
+     *      ENUMERATOR
+     **************************************************************************/
     
     public enum ScreenType
     {
