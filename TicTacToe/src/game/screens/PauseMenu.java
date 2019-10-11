@@ -1,13 +1,13 @@
 package game.screens;
 
-import processing.core.*;
+import game.TicTacToe;
 
 public  class PauseMenu extends MenuScreen
 {
     private int i = 0;
-    public PauseMenu(PApplet parent, PImage foreground, PImage background)
+    public PauseMenu(TicTacToe game)
     {
-        super(parent, foreground, background);
+        super(game);
         setMenuType(Menu.PAUSE);
         setMenuTitle();
         setLabel(i++, "Continue Game");

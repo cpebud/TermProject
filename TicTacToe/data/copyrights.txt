@@ -17,3 +17,6 @@ Chalkboard Font
 
 Chalkboard Soundfx
 	https://www.zapsplat.com/sound-effect-category/chalk-and-chalkboards/
+
+Retro Font
+	https://www.1001fonts.com/pc-senior-font.html

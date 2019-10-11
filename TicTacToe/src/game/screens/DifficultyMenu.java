@@ -1,14 +1,13 @@
 package game.screens;
 
-import processing.core.PApplet;
-import processing.core.PImage;
+import game.TicTacToe;
 
 public class DifficultyMenu extends MenuScreen
 {
     private int i = 0;
-    public DifficultyMenu(PApplet parent, PImage foreground, PImage background)
+    public DifficultyMenu(TicTacToe game)
     {
-        super(parent, foreground, background);
+        super(game);
         setMenuType(Menu.DIFFICULTY);
         setMenuTitle();
         setLabel(i++, "Easy");
