@@ -4,6 +4,10 @@ import game.TicTacToe;
 
 public class GameScreen extends Screen
 {
+    public static final int NUM_TILES = 9;
+    public static final int ROWS = 3;
+    public static final int COLS = 3;
+    
     public GameScreen(TicTacToe game)
     {
         super(game);
@@ -30,6 +34,9 @@ public class GameScreen extends Screen
     
     private void displayButtons()
     {
-        
+        for (int i = 0; i < NUM_TILES; i++)
+        {
+            game.getTile(i).display();
+        }
     }
 }

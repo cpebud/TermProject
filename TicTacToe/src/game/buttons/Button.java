@@ -1,7 +1,7 @@
 package game.buttons;
 
-import ddf.minim.AudioSample;
 import game.TicTacToe;
+
 public abstract class Button
 {   
     /***************************************************************************
@@ -10,10 +10,7 @@ public abstract class Button
     
     protected TicTacToe game;
     private ButtonType bType;
-    
-    private String label;
-    private AudioSample sound;
-    
+        
     private int xCoord;
     private int yCoord;
     
@@ -101,26 +98,6 @@ public abstract class Button
         return this.height;
     }
     
-    public void setLabel(String label)
-    {
-        this.label = label;
-    }
-    
-    public String getLabel()
-    {
-        return this.label;
-    }
-    
-    protected void setSound(AudioSample sound)
-    {
-        this.sound = sound;
-    }
-    
-    public AudioSample getSound()
-    {
-        return this.sound;
-    }
-    
     public int getFontSize()
     {
         return fontSize;
@@ -160,14 +137,21 @@ public abstract class Button
         this.fontColor     = game.getTheme().getFontColor();
         this.fontHover     = game.getTheme().getFontHover();
         this.fontHighlight = game.getTheme().getfontHighlight();
-        updateSound();
     }
     
-    protected abstract void updateSound();
+    public Boolean isInside(float mx, float my) 
+    {
+        if (mx >= getXcoord() - getWidth()/2 && mx <= getXcoord() + getWidth()/2)
+        {
+            if (my >= getYcoord() - getHeight()/2 && my <= getYcoord() + getHeight()/2)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     
-    public abstract Boolean isInside(float mx, float my);
-    
-    public abstract void display(String label);
+    public abstract void display();
     
     /***************************************************************************
      *      ENUMERATOR
@@ -175,6 +159,7 @@ public abstract class Button
     
     public enum ButtonType
     {
-        MENU, TILE;
+        MENU,
+        TILE;
     }
 }

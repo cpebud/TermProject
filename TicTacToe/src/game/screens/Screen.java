@@ -36,7 +36,7 @@ public abstract class Screen
 
     protected TicTacToe game;            // Game client
     
-    private ScreenType type;           // Type of Screen
+    private ScreenType sType;           // Type of Screen
     
     /*   Font Features   */
     private PFont font;
@@ -93,14 +93,14 @@ public abstract class Screen
      */
     protected void setType(ScreenType type)
     {
-        this.type = type;
+        this.sType = type;
     }
     
     /** Gets screen type 
      * @see Screen */
     public ScreenType getType()
     {
-        return this.type;
+        return this.sType;
     }
     
     protected PFont getFont()

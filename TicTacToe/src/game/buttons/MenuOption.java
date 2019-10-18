@@ -1,6 +1,5 @@
 package game.buttons;
 
-import ddf.minim.AudioSample;
 import game.Theme;
 import game.TicTacToe;
 import game.TicTacToe.Difficulty;
@@ -10,7 +9,9 @@ import processing.core.PConstants;
 
 public class MenuOption extends Button
 {
-    public MenuOption(TicTacToe game, int x, int y, AudioSample sound)
+    private String label;
+    
+    public MenuOption(TicTacToe game, int x, int y)
     {
         super(game);
         setButtonType(ButtonType.MENU);
@@ -18,17 +19,20 @@ public class MenuOption extends Button
         setHeight(30);
         setXcoord(x);
         setYcoord(y);
-        setSound(sound);
+    }
+    
+    public void setLabel(String label)
+    {
+        this.label = label;
+    }
+    
+    public String getLabel()
+    {
+        return this.label;
     }
     
     @Override
-    protected void updateSound()
-    {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void display(String label)
+    public void display()
     {
         setLabel(label);
         
@@ -53,19 +57,6 @@ public class MenuOption extends Button
         game.rectMode(PConstants.CENTER);
         //parent.rect(getXcoord() , getYcoord(), getWidth(), getHeight());
        
-    }
-    
-    @Override
-    public Boolean isInside(float mx, float my) 
-    {
-        if (mx >= getXcoord() - getWidth()/2 && mx <= getXcoord() + getWidth()/2)
-        {
-            if (my >= getYcoord() - getHeight()/2 && my <= getYcoord() + getHeight()/2)
-            {
-                return true;
-            }
-        }
-        return false;
     }
     
     public void getNextScreen(String label)
@@ -119,6 +110,4 @@ public class MenuOption extends Button
             break;
         }
     }
-
-    
 }

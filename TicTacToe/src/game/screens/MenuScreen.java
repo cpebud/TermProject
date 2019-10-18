@@ -18,7 +18,7 @@ public abstract class MenuScreen extends Screen
     private Menu mType;
     private String title;
     private String[] labels = {"","","","","",""};
-    public static final int NUMBUTTONS = 6;
+    public static final int NUM_BUTTONS = 6;
     
     public MenuScreen(TicTacToe game)
     {
@@ -71,7 +71,8 @@ public abstract class MenuScreen extends Screen
     {
         for (int i = 0; i < labels.length; i++)
         {
-            game.getOptions(i).display(this.labels[i]);
+            game.getOption(i).setLabel(this.labels[i]);
+            game.getOption(i).display();
         }
     }
     
