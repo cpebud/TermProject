@@ -96,11 +96,48 @@ public class GameBoard
         return true;
     }
     
-    public Boolean isWinner()
+    public Boolean isWinner(Symbol s)
     {
-        return false;
+    	//Boolean Variable
+    	boolean winner = false;
+    	//Check Row Winners
+    	if ((getTile(0).getTileSymbol() == s) && (getTile(1).getTileSymbol() == s) && (getTile(2).getTileSymbol() == s))
+		{
+			winner = true;
+		}
+    	else if ((getTile(3).getTileSymbol() == s) && (getTile(4).getTileSymbol() == s) && (getTile(5).getTileSymbol() == s))
+    	{
+			winner = true;
+    	}
+    	else if ((getTile(6).getTileSymbol() == s) && (getTile(7).getTileSymbol() == s) && (getTile(8).getTileSymbol() == s))
+    	{
+			winner = true;
+    	}
+    	//Check Column Winners
+    	else if ((getTile(0).getTileSymbol() == s) && (getTile(3).getTileSymbol() == s) && (getTile(6).getTileSymbol() == s))
+		{
+			winner = true;
+		}
+    	else if ((getTile(1).getTileSymbol() == s) && (getTile(4).getTileSymbol() == s) && (getTile(7).getTileSymbol() == s))
+    	{
+			winner = true;
+    	}
+    	else if ((getTile(2).getTileSymbol() == s) && (getTile(5).getTileSymbol() == s) && (getTile(8).getTileSymbol() == s))
+    	{
+			winner = true;
+    	}
+    	//Check Diagonal Winners
+    	else if ((getTile(0).getTileSymbol() == s) && (getTile(4).getTileSymbol() == s) && (getTile(8).getTileSymbol() == s))
+		{
+			winner = true;
+		}
+    	else if ((getTile(2).getTileSymbol() == s) && (getTile(4).getTileSymbol() == s) && (getTile(6).getTileSymbol() == s))
+    	{
+			winner = true;
+    	}
+    	
+        return winner;
     }
-    
     private void playGame()
     {
         while (!isFull() && !isWinner())
