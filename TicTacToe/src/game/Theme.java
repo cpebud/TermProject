@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * File Name:			
+ * Project:			
+ * 
+ * Designer(s):		Garrett Cross,
+ * 					Omar Kermiche,
+ * 					Autumn Nguyen,
+ * 					Thomas Pridy
+ * 
+ * Copyright © 2019. All rights reserved.
+ ******************************************************************************/
 package game;
 
 import ddf.minim.AudioSample;
@@ -28,7 +39,7 @@ public enum Theme
 {
     RETRO("retro", 45, 0xff64f00e, 0xffec1c24, 0xffffffff),  // green, red, white
     //DEFAULT("default", 0xff000000, 0xff6464, 0xffd63c3c),
-    CHALK("chalk", 100, 0xffffffff, 0Xff646464, 0xffd63c3c); // white, grey, red
+    CHALK("chalk", 100, 0xffefefef, 0Xff646464, 0xffd63c3c); // light grey, dark grey, red
     
     
     /***************************************************************************
@@ -52,6 +63,9 @@ public enum Theme
     private PImage initForeground;
     private PImage menuForeground;
     private PImage gameForeground;
+    
+    private PImage xSymbol;
+    private PImage oSymbol;
     
     private String soundFilePath;
     private AudioSample menuClick;
@@ -126,6 +140,16 @@ public enum Theme
         return gameForeground;
     }
     
+    public PImage getXsymbol()
+    {
+        return xSymbol;
+    }
+    
+    public PImage getOsymbol()
+    {
+        return oSymbol;
+    }
+    
     public AudioSample getMenuClick()
     {
         return menuClick;
@@ -155,6 +179,8 @@ public enum Theme
         this.initForeground = game.loadImage(imageFilePath + "-start.png");
         this.menuForeground = game.loadImage(imageFilePath + "-menu.png");
         this.gameForeground = game.loadImage(imageFilePath + "-board.png");
+        this.xSymbol        = game.loadImage(imageFilePath + "-xsymbol.png");
+        this.oSymbol        = game.loadImage(imageFilePath + "-osymbol.png");
     }
     
     public void loadSounds()

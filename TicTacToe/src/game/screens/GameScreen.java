@@ -1,12 +1,23 @@
+/*******************************************************************************
+ * File Name:			
+ * Project:			
+ * 
+ * Designer(s):		Garrett Cross,
+ * 					Omar Kermiche,
+ * 					Autumn Nguyen,
+ * 					Thomas Pridy
+ * 
+ * Copyright © 2019. All rights reserved.
+ ******************************************************************************/
 package game.screens;
 
 import game.TicTacToe;
 
 public class GameScreen extends Screen
 {
-    public static final int NUM_TILES = 9;
-    public static final int ROWS = 3;
-    public static final int COLS = 3;
+    /***************************************************************************
+     *      CONSTRUCTOR
+     **************************************************************************/
     
     public GameScreen(TicTacToe game)
     {
@@ -14,6 +25,10 @@ public class GameScreen extends Screen
         setType(ScreenType.GAME);
         setForeground(game.getTheme().getGameForeground());
     }
+    
+    /***************************************************************************
+     *      METHODS
+     **************************************************************************/
 
     @Override
     protected void updateForeground()
@@ -25,18 +40,30 @@ public class GameScreen extends Screen
     protected void displayForeground()
     {
         displayForegroundImage(330, 330);
-        displayButtons();
+        displayBoard();
+        displayMessage();
         
         game.fill(getFontColor());
         game.textSize(30*getFontSize()/100);
         game.text("hit 'P' to pause game", getWidth()/2, 13*getHeight()/16);
     }
     
-    private void displayButtons()
+    private void displayBoard()
     {
-        for (int i = 0; i < NUM_TILES; i++)
+        game.getBoard().display();
+    }
+    
+    private void displayMessage()
+    {
+        game.fill(getFontColor());
+        game.textSize(30*getFontSize()/100);
+        if (game.getCurrentPlayer() == game.player1) 
         {
-            game.getTile(i).display();
+            game.text("Player 1's turn...", getWidth()/2, 4*getHeight()/16);
+        } 
+        else if (game.getCurrentPlayer() == game.player2)
+        {
+            game.text("Player 2's turn...", getWidth()/2, 4*getHeight()/16);
         }
     }
 }

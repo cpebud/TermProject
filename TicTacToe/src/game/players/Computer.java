@@ -11,87 +11,82 @@
  ******************************************************************************/
 package game.players;
 
+import game.GameBoard;
 import game.TicTacToe;
-import game.buttons.GameTile.Symbol;
+import game.TicTacToe.Difficulty;
 
-public abstract class Player
-{
+public class Computer extends Player
+{    
     /***************************************************************************
      *      VARIABLES
      **************************************************************************/
     
-    protected TicTacToe game;
-    
-    private PlayerType pType;
-    
-    private Symbol symbol;
-    private int turn;
-    
+    private Difficulty difficulty;
+
 
     /***************************************************************************
      *      CONSTRUCTOR
      **************************************************************************/
     
-    public Player(TicTacToe game)
+    public Computer(TicTacToe game)
     {
-        this.game = game;
+        super(game);
+        
+        setType(PlayerType.COMPUTER);
+
+        this.difficulty = game.getDifficulty();
     }
     
     /***************************************************************************
      *      SETTERS/GETTERS
      **************************************************************************/
     
-    protected void setType(PlayerType type)
+    private void setDifficulty(Difficulty difficulty)
     {
-        this.pType = type;
-    }
-    
-    public PlayerType getType()
-    {
-        return pType;
-    }
-    
-    public void setSymbol(Symbol symbol)
-    {
-        this.symbol = symbol;
-    }
-    
-    public Symbol getSymbol()
-    {
-        return symbol;
-    }
-    
-    public int getTurn()
-    {
-        return turn;
+        this.difficulty = difficulty;
     }
     
     /***************************************************************************
      *      METHODS
      **************************************************************************/
-
-    public void incTurn()
+    
+    public void updateDifficulty()
     {
-        this.turn += 1;
+        setDifficulty(game.getDifficulty());
     }
     
-    public void decTurn()
+    @Override
+    public void takeTurn()
     {
-        if (this.turn > 0)
+        
+
+        game.setCurrentPlayer(this);
+        game.thread("pause");
+        switch(difficulty)
         {
-            this.turn -= 1;
+        case EASY:
+            easyTurn();
+            break;
+        case MEDIUM:
+            break;
+        case HARD:
+            break;
         }
+        incTurn();
+        game.setCurrentPlayer(game.player1);
     }
     
-    public abstract void takeTurn();
-    
-    /***************************************************************************
-     *      ENUMERATOR
-     **************************************************************************/
-
-    public enum PlayerType
+    private void easyTurn()
     {
-        HUMAN,
-        COMPUTER;
+        GameBoard board = game.getBoard();
+        if (!board.isFull())
+        {
+            int random = (int)(Math.random() * GameBoard.NUM_TILES);
+            while (!board.getTile(random).isEmpty())
+            {
+                random = (int)(Math.random() * GameBoard.NUM_TILES);
+            }
+            board.getTile(random).setTileSymbol(getSymbol());
+        }
     }
 }

@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * File Name:			
+ * Project:			
+ * 
+ * Designer(s):		Garrett Cross,
+ * 					Omar Kermiche,
+ * 					Autumn Nguyen,
+ * 					Thomas Pridy
+ * 
+ * Copyright © 2019. All rights reserved.
+ ******************************************************************************/
 package game.buttons;
 
 import game.TicTacToe;
@@ -17,25 +28,17 @@ public abstract class Button
     private int width;
     private int height;
     
-    private int fontSize;
-    private int fontColor;
-    private int fontHover;
-    private int fontHighlight;
-    
-    
     private Boolean hover = false;
 
     /***************************************************************************
      *      CONSTRUCTOR
      **************************************************************************/
     
-    public Button(TicTacToe game) {
+    public Button(TicTacToe game, int x, int y) 
+    {
         this.game = game;
-        
-        this.fontSize      = game.getTheme().getFontSize();
-        this.fontColor     = game.getTheme().getFontColor();
-        this.fontHover     = game.getTheme().getFontHover();
-        this.fontHighlight = game.getTheme().getfontHighlight();
+        this.xCoord = x;
+        this.yCoord = y;
     }
     
     /***************************************************************************
@@ -49,33 +52,17 @@ public abstract class Button
     
     public ButtonType getButtonType() 
     {
-        return this.bType;
-    }
-    
-    protected void setXcoord(int x)
-    {
-        this.xCoord = x;
+        return bType;
     }
     
     public int getXcoord()
     {
-        return this.xCoord;
-    }
-    
-    protected void setYcoord(int y)
-    {
-        this.yCoord = y;
+        return xCoord;
     }
     
     public int getYcoord()
     {
-        return this.yCoord;
-    }
-    
-    protected void setCoord(int x, int y)
-    {
-        setXcoord(x);
-        setYcoord(y);
+        return yCoord;
     }
         
     protected void setWidth(int width)
@@ -85,7 +72,7 @@ public abstract class Button
     
     public int getWidth()
     {
-        return this.width;
+        return width;
     }
     
     protected void setHeight(int height)
@@ -95,27 +82,7 @@ public abstract class Button
     
     public int getHeight()
     {
-        return this.height;
-    }
-    
-    public int getFontSize()
-    {
-        return fontSize;
-    }
-    
-    public int getFontColor()
-    {
-        return fontColor;
-    }
-    
-    public int getFontHover()
-    {
-        return fontHover;
-    }
-    
-    public int getFontHighlight()
-    {
-        return fontHighlight;
+        return height;
     }
     
     public void setHover(Boolean hover)
@@ -125,19 +92,12 @@ public abstract class Button
     
     public Boolean getHover()
     {
-        return this.hover;
+        return hover;
     }
     
     /***************************************************************************
      *      METHODS
      **************************************************************************/
-    public void update()
-    {
-        this.fontSize      = game.getTheme().getFontSize();
-        this.fontColor     = game.getTheme().getFontColor();
-        this.fontHover     = game.getTheme().getFontHover();
-        this.fontHighlight = game.getTheme().getfontHighlight();
-    }
     
     public Boolean isInside(float mx, float my) 
     {
@@ -152,6 +112,7 @@ public abstract class Button
     }
     
     public abstract void display();
+    public abstract void update();
     
     /***************************************************************************
      *      ENUMERATOR
@@ -160,6 +121,6 @@ public abstract class Button
     public enum ButtonType
     {
         MENU,
-        TILE;
+        GAME;
     }
 }
