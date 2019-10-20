@@ -1,6 +1,16 @@
+/*******************************************************************************
+ * File Name:			
+ * Project:			
+ * 
+ * Designer(s):		Garrett Cross,
+ * 					Omar Kermiche,
+ * 					Autumn Nguyen,
+ * 					Thomas Pridy
+ * 
+ * Copyright © 2019. All rights reserved.
+ ******************************************************************************/
 package game.buttons;
 
-import ddf.minim.AudioSample;
 import game.Theme;
 import game.TicTacToe;
 import game.TicTacToe.Difficulty;
@@ -10,62 +20,105 @@ import processing.core.PConstants;
 
 public class MenuOption extends Button
 {
-    public MenuOption(TicTacToe game, int x, int y, AudioSample sound)
+    /***************************************************************************
+     *      VARIABLES
+     **************************************************************************/
+    
+    private String label;
+    
+    private int fontSize;
+    private int fontColor;
+    private int fontHover;
+    private int fontHighlight;
+
+    /***************************************************************************
+     *      CONSTRUCTOR
+     **************************************************************************/
+    
+    public MenuOption(TicTacToe game, int x, int y)
     {
-        super(game);
+        super(game, x, y);
+        
         setButtonType(ButtonType.MENU);
         setWidth(190);
         setHeight(30);
-        setXcoord(x);
-        setYcoord(y);
-        setSound(sound);
+        
+        this.fontSize      = game.getTheme().getFontSize();
+        this.fontColor     = game.getTheme().getFontColor();
+        this.fontHover     = game.getTheme().getFontHover();
+        this.fontHighlight = game.getTheme().getfontHighlight();
     }
     
-    @Override
-    protected void updateSound()
+    /***************************************************************************
+     *      SETTERS/GETTERS
+     **************************************************************************/
+    
+    public void setLabel(String label)
     {
-        // TODO Auto-generated method stub
-        
+        this.label = label;
     }
-
-    public void display(String label)
+    
+    public String getLabel()
     {
-        setLabel(label);
-        
+        return this.label;
+    }
+    
+    public int getFontSize()
+    {
+        return fontSize;
+    }
+    
+    public int getFontColor()
+    {
+        return fontColor;
+    }
+    
+    public int getFontHover()
+    {
+        return fontHover;
+    }
+    
+    public int getFontHighlight()
+    {
+        return fontHighlight;
+    }
+    
+    /***************************************************************************
+     *      METHODS
+     **************************************************************************/
+
+    @Override
+    public void display()
+    {        
         if (getHover())
         {
-            game.fill(getFontHover());
+            game.fill(fontHover);
         }
         else
         {
             if (game.getDifficulty().getLabel() == label || game.getTheme().getLabel() == label)
             {
-                game.fill(getFontHighlight());
+                game.fill(fontHighlight);
             }
             else
             {
-                game.fill(getFontColor());
+                game.fill(fontColor);
             }
         }
         
         game.textSize(32*getFontSize()/100);
         game.text(getLabel(), getXcoord(), getYcoord());
         game.rectMode(PConstants.CENTER);
-        //parent.rect(getXcoord() , getYcoord(), getWidth(), getHeight());
-       
+        //parent.rect(getXcoord() , getYcoord(), getWidth(), getHeight()); 
     }
     
     @Override
-    public Boolean isInside(float mx, float my) 
+    public void update()
     {
-        if (mx >= getXcoord() - getWidth()/2 && mx <= getXcoord() + getWidth()/2)
-        {
-            if (my >= getYcoord() - getHeight()/2 && my <= getYcoord() + getHeight()/2)
-            {
-                return true;
-            }
-        }
-        return false;
+        this.fontSize      = game.getTheme().getFontSize();
+        this.fontColor     = game.getTheme().getFontColor();
+        this.fontHover     = game.getTheme().getFontHover();
+        this.fontHighlight = game.getTheme().getfontHighlight();
     }
     
     public void getNextScreen(String label)
@@ -74,7 +127,8 @@ public class MenuOption extends Button
         {
         case "New Game":
             game.changeScreen(ScreenType.GAME, Menu.PAUSE);
-            //GameBoard.clear();
+            game.getBoard().clear();
+            game.assignPlayerSymbol();
             break;
         case "Continue Game":
             game.changeScreen(ScreenType.GAME, Menu.PAUSE);
@@ -86,13 +140,13 @@ public class MenuOption extends Button
             game.changeScreen(ScreenType.MENU, Menu.DIFFICULTY);
             break;
         case "Easy":
-            game.setDifficulty(Difficulty.EASY);
+            game.updateDifficulty(Difficulty.EASY);
             break;
         case "Medium":
-            game.setDifficulty(Difficulty.MEDIUM);
+            game.updateDifficulty(Difficulty.MEDIUM);
             break;
         case "Hard":
-            game.setDifficulty(Difficulty.HARD);
+            game.updateDifficulty(Difficulty.HARD);
             break;
         case "Settings":
             game.changeScreen(ScreenType.MENU, Menu.SETTINGS);
@@ -119,6 +173,4 @@ public class MenuOption extends Button
             break;
         }
     }
-
-    
 }

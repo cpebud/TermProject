@@ -11,39 +11,39 @@
  ******************************************************************************/
 package game.screens;
 
-import game.Theme;
 import game.TicTacToe;
 
-public class ThemesMenu extends MenuScreen
-{
+public class VersusMenu extends MenuScreen
+{   
     /***************************************************************************
      *      VARIABLES
      **************************************************************************/
-    
-    private int i = 0;
 
+    private int i = 0;
+    
     /***************************************************************************
      *      CONSTRUCTOR
      **************************************************************************/
     
-    public ThemesMenu(TicTacToe game)
+    public VersusMenu(TicTacToe game)
     {
         super(game);
-        setMenuType(Menu.THEMES);
+        setMenuType(Menu.VERSUS);
         setMenuTitle();
-        setLabels();
-        setLabel(i++, "Back");
+        setLabel(i++, "Computer");
+        setLabel(i++, "Human");
     }
     
     /***************************************************************************
      *      SETTERS/GETTERS
      **************************************************************************/
-    
-    private void setLabels()
-    {
-        for (Theme theme : Theme.values())
-        {
-            setLabel(i++, theme.getLabel());
-        }
-    }
+
+    /***************************************************************************
+     *      METHODS
+     **************************************************************************/
+
+    /***************************************************************************
+     *      ENUMERATORS
+     **************************************************************************/
+
 }

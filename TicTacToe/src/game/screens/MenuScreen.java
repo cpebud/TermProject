@@ -15,10 +15,18 @@ import game.TicTacToe;
 
 public abstract class MenuScreen extends Screen
 {
+    /***************************************************************************
+     *      VARIABLES
+     **************************************************************************/
+    
     private Menu mType;
     private String title;
     private String[] labels = {"","","","","",""};
-    public static final int NUMBUTTONS = 6;
+    public static final int NUM_BUTTONS = 6;
+
+    /***************************************************************************
+     *      CONSTRUCTOR
+     **************************************************************************/
     
     public MenuScreen(TicTacToe game)
     {
@@ -26,6 +34,10 @@ public abstract class MenuScreen extends Screen
         setType(ScreenType.MENU);
         setForeground(game.getTheme().getMenuForeground());
     }
+    
+    /***************************************************************************
+     *      SETTERS/GETTERS
+     **************************************************************************/
     
     protected void setMenuType(Menu mType) {
         this.mType = mType;
@@ -51,6 +63,10 @@ public abstract class MenuScreen extends Screen
         this.labels[i] = label;
     }
     
+    /***************************************************************************
+     *      METHODS
+     **************************************************************************/
+
     @Override
     protected void updateForeground()
     {
@@ -71,14 +87,20 @@ public abstract class MenuScreen extends Screen
     {
         for (int i = 0; i < labels.length; i++)
         {
-            game.getOptions(i).display(this.labels[i]);
+            game.getOption(i).setLabel(this.labels[i]);
+            game.getOption(i).display();
         }
     }
-    
+
+    /***************************************************************************
+     *      ENUMERATOR
+     **************************************************************************/
+
     public enum Menu
     {
         MAIN("Main Menu"),
         PAUSE("Paused"),
+        VERSUS("Versus"),
         DIFFICULTY("Difficulty"),
         SETTINGS("Settings"),
         THEMES("Themes");

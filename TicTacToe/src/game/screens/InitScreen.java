@@ -26,6 +26,10 @@ import game.TicTacToe;
  */
 public class InitScreen extends Screen
 {
+    /***************************************************************************
+     *      CONSTRUCTOR
+     **************************************************************************/
+    
     /**
      * <tt>InitScreen</tt> class.Intial game screen on startup.
      * Extends <tt>Screen</tt>.
@@ -44,6 +48,10 @@ public class InitScreen extends Screen
         setForeground(game.getTheme().getInitForeground());
     }
     
+    /***************************************************************************
+     *      METHODS
+     **************************************************************************/
+
     @Override
     protected void updateForeground()
     {

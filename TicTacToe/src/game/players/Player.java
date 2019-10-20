@@ -9,118 +9,89 @@
  * 
  * Copyright © 2019. All rights reserved.
  ******************************************************************************/
-package game.buttons;
+package game.players;
 
 import game.TicTacToe;
+import game.buttons.GameTile.Symbol;
 
-public abstract class Button
-{   
+public abstract class Player
+{
     /***************************************************************************
      *      VARIABLES
      **************************************************************************/
     
     protected TicTacToe game;
-    private ButtonType bType;
-        
-    private int xCoord;
-    private int yCoord;
     
-    private int width;
-    private int height;
+    private PlayerType pType;
     
-    private Boolean hover = false;
+    private Symbol symbol;
+    private int turn;
+    
 
     /***************************************************************************
      *      CONSTRUCTOR
      **************************************************************************/
     
-    public Button(TicTacToe game, int x, int y) 
+    public Player(TicTacToe game)
     {
         this.game = game;
-        this.xCoord = x;
-        this.yCoord = y;
     }
     
     /***************************************************************************
      *      SETTERS/GETTERS
      **************************************************************************/
     
-    protected void setButtonType(ButtonType bType)
+    protected void setType(PlayerType type)
     {
-        this.bType = bType;
+        this.pType = type;
     }
     
-    public ButtonType getButtonType() 
+    public PlayerType getType()
     {
-        return bType;
+        return pType;
     }
     
-    public int getXcoord()
+    public void setSymbol(Symbol symbol)
     {
-        return xCoord;
+        this.symbol = symbol;
     }
     
-    public int getYcoord()
+    public Symbol getSymbol()
     {
-        return yCoord;
-    }
-        
-    protected void setWidth(int width)
-    {
-        this.width = width;
+        return symbol;
     }
     
-    public int getWidth()
+    public int getTurn()
     {
-        return width;
-    }
-    
-    protected void setHeight(int height)
-    {
-        this.height = height;
-    }
-    
-    public int getHeight()
-    {
-        return height;
-    }
-    
-    public void setHover(Boolean hover)
-    {
-        this.hover = hover;
-    }
-    
-    public Boolean getHover()
-    {
-        return hover;
+        return turn;
     }
     
     /***************************************************************************
      *      METHODS
      **************************************************************************/
-    
-    public Boolean isInside(float mx, float my) 
+
+    public void incTurn()
     {
-        if (mx >= getXcoord() - getWidth()/2 && mx <= getXcoord() + getWidth()/2)
-        {
-            if (my >= getYcoord() - getHeight()/2 && my <= getYcoord() + getHeight()/2)
-            {
-                return true;
-            }
-        }
-        return false;
+        this.turn += 1;
     }
     
-    public abstract void display();
-    public abstract void update();
+    public void decTurn()
+    {
+        if (this.turn > 0)
+        {
+            this.turn -= 1;
+        }
+    }
+    
+    public abstract void takeTurn();
     
     /***************************************************************************
      *      ENUMERATOR
      **************************************************************************/
-    
-    public enum ButtonType
+
+    public enum PlayerType
     {
-        MENU,
-        GAME;
+        HUMAN,
+        COMPUTER;
     }
 }

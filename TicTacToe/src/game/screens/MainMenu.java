@@ -15,7 +15,16 @@ import game.TicTacToe;
 
 public class MainMenu extends MenuScreen
 {   
+    /***************************************************************************
+     *      VARIABLES
+     **************************************************************************/
+    
     private int i = 0;
+
+    /***************************************************************************
+     *      CONSTRUCTOR
+     **************************************************************************/
+    
     public MainMenu(TicTacToe game)
     {
         super(game);
@@ -25,5 +34,5 @@ public class MainMenu extends MenuScreen
         setLabel(i++, "Difficulty");
         setLabel(i++, "Settings");
         setLabel(i++, "Quit");
-    }  
+    }
 }

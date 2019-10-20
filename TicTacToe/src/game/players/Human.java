@@ -9,41 +9,42 @@
  * 
  * Copyright © 2019. All rights reserved.
  ******************************************************************************/
-package game.screens;
+package game.players;
 
-import game.Theme;
 import game.TicTacToe;
 
-public class ThemesMenu extends MenuScreen
+public class Human extends Player
 {
     /***************************************************************************
      *      VARIABLES
      **************************************************************************/
     
-    private int i = 0;
+    private String name;
 
     /***************************************************************************
      *      CONSTRUCTOR
      **************************************************************************/
     
-    public ThemesMenu(TicTacToe game)
+    public Human(TicTacToe game)
     {
         super(game);
-        setMenuType(Menu.THEMES);
-        setMenuTitle();
-        setLabels();
-        setLabel(i++, "Back");
+        setType(PlayerType.HUMAN);
     }
     
     /***************************************************************************
      *      SETTERS/GETTERS
      **************************************************************************/
     
-    private void setLabels()
+    
+    
+    /***************************************************************************
+     *      METHODS
+     **************************************************************************/
+
+    @Override
+    public void takeTurn()
     {
-        for (Theme theme : Theme.values())
-        {
-            setLabel(i++, theme.getLabel());
-        }
+        game.setCurrentPlayer(this);
+        incTurn();
     }
 }
