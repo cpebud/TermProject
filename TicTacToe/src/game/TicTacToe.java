@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright © 2019. All rights reserved.
+ * Copyright Â© 2019. All rights reserved.
  ******************************************************************************/
 package game;
 
@@ -227,6 +227,17 @@ public class TicTacToe extends PApplet
                 GameTile tile = board.getTile(i);
 
                 tile.setHover(tile.isInside(mouseX, mouseY));
+            }
+            if (currentPlayer.getType() == PlayerType.COMPUTER )
+            {
+            	pause();
+            	
+            	
+            	player2.takeTurn(); 
+            	if (board.isWinner(player2.getSymbol()) == true)
+            	{
+                	changeScreen(ScreenType.MENU,Menu.PAUSE);
+            	}
             }
             break;
             
