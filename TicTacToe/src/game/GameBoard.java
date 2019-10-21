@@ -95,17 +95,4 @@ public class GameBoard
         }
         return true;
     }
-    
-    public Boolean isWinner()
-    {
-        return false;
-    }
-    
-    private void playGame()
-    {
-        while (!isFull() && !isWinner())
-        {
-            
-        }
-    }
 }

@@ -80,6 +80,7 @@ public class TicTacToe extends PApplet
     
     public Player player1 = new Human(this);
     public Player player2 = new Computer(this);
+    Player playerAlt = new Human(this);
     
     private Map<String, Screen> screens = new HashMap<>();
     
@@ -195,8 +196,8 @@ public class TicTacToe extends PApplet
                     GameTile tile = board.getTile(i);
                     if (tile.isEmpty() && tile.isInside(mouseX, mouseY)) 
                     {
-                        tile.setTileSymbol(player1.getSymbol());
-                        player2.takeTurn();
+                        tile.setTileSymbol(getCurrentPlayer().getSymbol());
+                        ((Human)getCurrentPlayer()).setHasGone(true);
                     }
                 }
             }
@@ -328,7 +329,7 @@ public class TicTacToe extends PApplet
     /**
      * @param currentPlayer : the currentPlayer to set
      */
-    public void setCurrentPlayer(Player currentPlayer)
+    private void setCurrentPlayer(Player currentPlayer)
     {
         this.currentPlayer = currentPlayer;
     }
@@ -445,13 +446,24 @@ public class TicTacToe extends PApplet
         }
     }
     
+    public void nextPlayer()
+    {
+        if (currentPlayer == player1)
+        {
+            setCurrentPlayer(player2);
+        }
+        else if (currentPlayer == player2)
+        {
+            setCurrentPlayer(player1);
+        }
+    }
+    
     public void updateDifficulty(Difficulty difficulty)
     {
         setDifficulty(difficulty);
         if (player2.getType() == PlayerType.COMPUTER)
         {
             ((Computer)player2).updateDifficulty();
-
         }
     }
     
@@ -479,9 +491,17 @@ public class TicTacToe extends PApplet
         }
     }
     
-    public void pause()
+    public void playGame()
     {
-        delay(3000);
+        while (getScreen() == ScreenType.GAME && 
+               !getCurrentPlayer().isWinner() && !board.isFull())
+        {
+            getCurrentPlayer().takeTurn();
+            if (!getCurrentPlayer().isWinner())
+            {
+                nextPlayer();
+            }
+        }
     }
     
     /***************************************************************************

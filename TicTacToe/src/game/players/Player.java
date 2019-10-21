@@ -83,6 +83,11 @@ public abstract class Player
         }
     }
     
+    public Boolean isWinner()
+    {
+        return false;
+    }
+    
     public abstract void takeTurn();
     
     /***************************************************************************

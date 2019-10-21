@@ -20,6 +20,7 @@ public class Human extends Player
      **************************************************************************/
     
     private String name;
+    private Boolean hasGone = false;
 
     /***************************************************************************
      *      CONSTRUCTOR
@@ -35,7 +36,10 @@ public class Human extends Player
      *      SETTERS/GETTERS
      **************************************************************************/
     
-    
+    public void setHasGone(Boolean hasGone)
+    {
+        this.hasGone = hasGone;
+    }
     
     /***************************************************************************
      *      METHODS
@@ -44,7 +48,11 @@ public class Human extends Player
     @Override
     public void takeTurn()
     {
-        game.setCurrentPlayer(this);
+        while(!hasGone)
+        {
+            game.delay(1);
+        }
+        setHasGone(false);
         incTurn();
     }
 }
