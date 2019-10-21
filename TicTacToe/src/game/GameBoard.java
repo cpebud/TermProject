@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright © 2019. All rights reserved.
+ * Copyright Â© 2019. All rights reserved.
  ******************************************************************************/
 package game;
 
@@ -95,7 +95,7 @@ public class GameBoard
         }
         return true;
     }
-    
+  
     public Boolean isWinner(Symbol s)
     {
     	//Boolean Variable
@@ -137,12 +137,5 @@ public class GameBoard
     	}
     	
         return winner;
-    }
-    private void playGame()
-    {
-        while (!isFull() && !isWinner())
-        {
-            
-        }
     }
 }

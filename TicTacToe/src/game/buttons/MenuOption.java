@@ -129,6 +129,7 @@ public class MenuOption extends Button
             game.changeScreen(ScreenType.GAME, Menu.PAUSE);
             game.getBoard().clear();
             game.assignPlayerSymbol();
+            game.thread("playGame");
             break;
         case "Continue Game":
             game.changeScreen(ScreenType.GAME, Menu.PAUSE);

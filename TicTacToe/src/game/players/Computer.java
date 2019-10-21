@@ -58,10 +58,7 @@ public class Computer extends Player
     @Override
     public void takeTurn()
     {
-        
-
-        game.setCurrentPlayer(this);
-        game.thread("pause");
+        game.delay(1500);
         switch(difficulty)
         {
         case EASY:
@@ -73,7 +70,6 @@ public class Computer extends Player
             break;
         }
         incTurn();
-        game.setCurrentPlayer(game.player1);
     }
     
     private void easyTurn()
