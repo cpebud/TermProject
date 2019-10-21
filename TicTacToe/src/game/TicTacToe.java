@@ -196,10 +196,22 @@ public class TicTacToe extends PApplet
                     if (tile.isEmpty() && tile.isInside(mouseX, mouseY)) 
                     {
                         tile.setTileSymbol(player1.getSymbol());
-                        player2.takeTurn();
+                        if (board.isWinner(player1.getSymbol()) == true) 
+                        { 
+                        	changeScreen(ScreenType.MENU,Menu.PAUSE);
+                        }
+                        else
+                        {
+                        	player2.takeTurn(); 
+                        	if (board.isWinner(player2.getSymbol()) == true)
+                        	{
+                            	changeScreen(ScreenType.MENU,Menu.PAUSE);
+                        	}
+                        }
                     }
                 }
             }
+           
             break;
             
         default:
@@ -226,6 +238,17 @@ public class TicTacToe extends PApplet
                 GameTile tile = board.getTile(i);
 
                 tile.setHover(tile.isInside(mouseX, mouseY));
+            }
+            if (currentPlayer.getType() == PlayerType.COMPUTER )
+            {
+            	pause();
+            	
+            	
+            	player2.takeTurn(); 
+            	if (board.isWinner(player2.getSymbol()) == true)
+            	{
+                	changeScreen(ScreenType.MENU,Menu.PAUSE);
+            	}
             }
             break;
             
