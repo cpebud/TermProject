@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright © 2019. All rights reserved.
+ * Copyright Â© 2019. All rights reserved.
  ******************************************************************************/
 package game;
 
@@ -202,7 +202,9 @@ public class TicTacToe extends PApplet
                 }
             }
             break;
-            
+        case END:
+            goMainMenu();
+            break;
         default:
             break;
         }
