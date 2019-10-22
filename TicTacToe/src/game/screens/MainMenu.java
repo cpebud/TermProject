@@ -31,8 +31,8 @@ public class MainMenu extends MenuScreen
         setMenuType(Menu.MAIN);
         setMenuTitle();
         setLabel(i++, "New Game");
-        setLabel(i++, "Difficulty");
-        setLabel(i++, "Settings");
+        //setLabel(i++, "Difficulty");
+        //setLabel(i++, "Settings");
         setLabel(i++, "Quit");
     }
 }
