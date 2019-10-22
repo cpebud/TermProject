@@ -54,5 +54,9 @@ public class Human extends Player
         }
         setHasGone(false);
         incTurn();
+        if (isWinner())
+        {
+            
+        }
     }
 }

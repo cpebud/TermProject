@@ -197,7 +197,15 @@ public class TicTacToe extends PApplet
                     if (tile.isEmpty() && tile.isInside(mouseX, mouseY)) 
                     {
                         tile.setTileSymbol(getCurrentPlayer().getSymbol());
-                        ((Human)getCurrentPlayer()).setHasGone(true);
+                        //((Human)getCurrentPlayer()).setHasGone(true);
+                        if (!currentPlayer.isWinner())
+                        {
+                            nextPlayer();
+                        }
+                        else
+                        {
+                            
+                        }
                     }
                 }
             }
@@ -229,6 +237,10 @@ public class TicTacToe extends PApplet
                 GameTile tile = board.getTile(i);
 
                 tile.setHover(tile.isInside(mouseX, mouseY));
+            }
+            if (getCurrentPlayer().getType() == PlayerType.COMPUTER)
+            {
+                getCurrentPlayer().takeTurn();
             }
             break;
             
@@ -495,15 +507,7 @@ public class TicTacToe extends PApplet
     
     public void playGame()
     {
-        while (getScreen() == ScreenType.GAME && 
-               !getCurrentPlayer().isWinner() && !board.isFull())
-        {
-            getCurrentPlayer().takeTurn();
-            if (!getCurrentPlayer().isWinner())
-            {
-                nextPlayer();
-            }
-        }
+        
     }
     
     /***************************************************************************
