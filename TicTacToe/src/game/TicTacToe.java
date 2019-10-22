@@ -34,6 +34,7 @@ import game.screens.Screen;
 import game.screens.Screen.ScreenType;
 import game.screens.SettingsMenu;
 import game.screens.ThemesMenu;
+import game.screens.WinScreen;
 import processing.core.PApplet;
 import util.Reference;
 
@@ -80,7 +81,7 @@ public class TicTacToe extends PApplet
     
     public Player player1 = new Human(this);
     public Player player2 = new Computer(this);
-    Player playerAlt = new Human(this);
+    public Player playerAlt = new Human(this);
     
     private Map<String, Screen> screens = new HashMap<>();
     
@@ -155,7 +156,8 @@ public class TicTacToe extends PApplet
         case GAME:
             screens.get("Game").display();
             break;
-        case END:
+        case WIN:
+            screens.get("Win").display();
             break;
         default:
             screens.get("Initial").display();
@@ -196,21 +198,13 @@ public class TicTacToe extends PApplet
                     GameTile tile = board.getTile(i);
                     if (tile.isEmpty() && tile.isInside(mouseX, mouseY)) 
                     {
-                        tile.setTileSymbol(getCurrentPlayer().getSymbol());
-                        //((Human)getCurrentPlayer()).setHasGone(true);
-                        if (!currentPlayer.isWinner())
-                        {
-                            nextPlayer();
-                        }
-                        else
-                        {
-                            
-                        }
+                        tile.setTileSymbol(currentPlayer.getSymbol());
+                        currentPlayer.takeTurn();
                     }
                 }
             }
             break;
-        case END:
+        case WIN:
             goMainMenu();
             break;
         default:
@@ -285,6 +279,7 @@ public class TicTacToe extends PApplet
         screens.put("Difficulty", new DifficultyMenu(this));
         screens.put("Settings", new SettingsMenu(this));
         screens.put("Themes", new ThemesMenu(this));
+        screens.put("Win", new WinScreen(this));
     }
     
     /** Load buttons */

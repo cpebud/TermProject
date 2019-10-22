@@ -14,6 +14,8 @@ package game.players;
 import game.GameBoard;
 import game.TicTacToe;
 import game.TicTacToe.Difficulty;
+import game.screens.MenuScreen.Menu;
+import game.screens.Screen.ScreenType;
 
 public class Computer extends Player
 {    
@@ -70,13 +72,13 @@ public class Computer extends Player
             break;
         }
         incTurn();
-        if (!isWinner()) 
+        if (!isWinner() && !game.getBoard().isFull()) 
         {
             game.nextPlayer();
         }
         else
         {
-            
+            game.changeScreen(ScreenType.WIN, Menu.MAIN);
         }
     }
     

@@ -84,6 +84,11 @@ public abstract class Player
         }
     }
     
+    public void resetTurn()
+    {
+        this.turn = 0;
+    }
+    
     public Boolean isWinner()
     {
         //Boolean Variable
