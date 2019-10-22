@@ -202,7 +202,9 @@ public class TicTacToe extends PApplet
                 }
             }
             break;
-            
+        case END:
+            goMainMenu();
+            break;
         default:
             break;
         }

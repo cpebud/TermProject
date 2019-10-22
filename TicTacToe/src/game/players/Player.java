@@ -11,6 +11,7 @@
  ******************************************************************************/
 package game.players;
 
+import game.GameBoard;
 import game.TicTacToe;
 import game.buttons.GameTile.Symbol;
 
@@ -85,7 +86,49 @@ public abstract class Player
     
     public Boolean isWinner()
     {
-        return false;
+        //Boolean Variable
+        boolean winner = false;
+        
+        Symbol s = getSymbol();
+        
+        GameBoard board = game.getBoard();
+        //Check Row Winners
+        if ((board.getTile(0).getTileSymbol() == s) && (board.getTile(1).getTileSymbol() == s) && (board.getTile(2).getTileSymbol() == s))
+        {
+            winner = true;
+        }
+        else if ((board.getTile(3).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(5).getTileSymbol() == s))
+        {
+            winner = true;
+        }
+        else if ((board.getTile(6).getTileSymbol() == s) && (board.getTile(7).getTileSymbol() == s) && (board.getTile(8).getTileSymbol() == s))
+        {
+            winner = true;
+        }
+        //Check Column Winners
+        else if ((board.getTile(0).getTileSymbol() == s) && (board.getTile(3).getTileSymbol() == s) && (board.getTile(6).getTileSymbol() == s))
+        {
+            winner = true;
+        }
+        else if ((board.getTile(1).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(7).getTileSymbol() == s))
+        {
+            winner = true;
+        }
+        else if ((board.getTile(2).getTileSymbol() == s) && (board.getTile(5).getTileSymbol() == s) && (board.getTile(8).getTileSymbol() == s))
+        {
+            winner = true;
+        }
+        //Check Diagonal Winners
+        else if ((board.getTile(0).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(8).getTileSymbol() == s))
+        {
+            winner = true;
+        }
+        else if ((board.getTile(2).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(6).getTileSymbol() == s))
+        {
+            winner = true;
+        }
+        
+        return winner;
     }
     
     public abstract void takeTurn();
