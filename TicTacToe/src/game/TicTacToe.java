@@ -238,6 +238,7 @@ public class TicTacToe extends PApplet
 
                 tile.setHover(tile.isInside(mouseX, mouseY));
             }
+
             if (getCurrentPlayer().getType() == PlayerType.COMPUTER)
             {
                 getCurrentPlayer().takeTurn();
