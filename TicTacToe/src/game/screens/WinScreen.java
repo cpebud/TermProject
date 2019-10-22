@@ -12,6 +12,8 @@
 package game.screens;
 
 import game.TicTacToe;
+import game.players.Player;
+import game.players.Player.PlayerType;
 
 /**
  * <tt>WinScreen</tt> class.Win game screen when winner is determined.
@@ -44,8 +46,8 @@ public class WinScreen extends Screen
     public WinScreen(TicTacToe game)
     {
         super(game);
-        setType(ScreenType.END);
-        setForeground(game.getTheme().getInitForeground());
+        setType(ScreenType.WIN);
+        setForeground(game.getTheme().getGameForeground());
     }
     
     /***************************************************************************
@@ -55,19 +57,46 @@ public class WinScreen extends Screen
     @Override
     protected void updateForeground()
     {
-        setForeground(game.getTheme().getInitForeground());        
+        setForeground(game.getTheme().getGameForeground());        
     } 
     
     @Override
     public void displayForeground()
     {
+        Player player = game.getCurrentPlayer();
+        
         // Display foreground image with given dimensions
         displayForegroundImage(330, 330);
+        
+        game.getBoard().display();
         
         // Display text to initiate game
         game.fill(getFontColor());
         game.textSize(30*getFontSize()/100);
-        game.text("Winner! Good job.", getWidth()/2, 13*getHeight()/16);
-    
+        if (game.getBoard().isFull() && !player.isWinner())
+        {
+            game.text("It's a tie! Better luck next time.", getWidth()/2, 25*getHeight()/32);
+        }
+        else
+        {
+        
+            if (player == game.player1)
+            {
+                game.text("Player 1 won! Good job.", getWidth()/2, 25*getHeight()/32);
+            }
+            else if (player == game.player2)
+            {
+                switch (player.getType())
+                {
+                case HUMAN:
+                    game.text("Player 2 won! Good job.", getWidth()/2, 25*getHeight()/32);
+                    break;
+                case COMPUTER:
+                    game.text("Player 2 won! Wow...the computer won.", getWidth()/2, 25*getHeight()/32);
+                    break;
+                }
+            }
+        }
+        game.text("Number of Turns: " + player.getTurn(), getWidth()/2, 27*getHeight()/32);
     }
 }

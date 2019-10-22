@@ -12,6 +12,8 @@
 package game.players;
 
 import game.TicTacToe;
+import game.screens.MenuScreen.Menu;
+import game.screens.Screen.ScreenType;
 
 public class Human extends Player
 {
@@ -48,15 +50,14 @@ public class Human extends Player
     @Override
     public void takeTurn()
     {
-        while(!hasGone)
-        {
-            game.delay(1);
-        }
-        setHasGone(false);
         incTurn();
-        if (isWinner())
+        if (!game.getCurrentPlayer().isWinner() && !game.getBoard().isFull())
         {
-            
+            game.nextPlayer();
+        }
+        else
+        {
+            game.changeScreen(ScreenType.WIN,Menu.MAIN);
         }
     }
 }

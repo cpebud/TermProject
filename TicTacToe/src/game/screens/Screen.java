@@ -226,6 +226,6 @@ public abstract class Screen
         INIT, // Initial game screen on startup
         MENU, // Base menu screen
         GAME, // Screen during gameplay
-        END;  // Screen for victory or gameover
+        WIN;  // Screen for victory or gameover
     }
 }
