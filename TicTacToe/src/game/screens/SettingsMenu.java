@@ -31,7 +31,7 @@ public class SettingsMenu extends MenuScreen
         setMenuType(Menu.SETTINGS);
         setMenuTitle();
         setLabel(i++, "Themes");
-        setLabel(i++, "Sounds");
+        //setLabel(i++, "Sounds");
         setLabel(i++, "Back");
     }
 }

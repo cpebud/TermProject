@@ -121,16 +121,16 @@ public class MenuOption extends Button
         this.fontHighlight = game.getTheme().getfontHighlight();
     }
     
-    public void getNextScreen(String label)
+    public void getFunction(String label)
     {
         switch(label)
         {
         case "New Game":
             game.changeScreen(ScreenType.GAME, Menu.PAUSE);
             game.getBoard().clear();
-            game.assignPlayerSymbol();
             game.player1.resetTurn();
             game.player2.resetTurn();
+            game.assignPlayerSymbol();
             break;
         case "Continue Game":
             game.changeScreen(ScreenType.GAME, Menu.PAUSE);
