@@ -13,7 +13,6 @@ package game.screens;
 
 import game.TicTacToe;
 import game.players.Player;
-import game.players.Player.PlayerType;
 
 /**
  * <tt>WinScreen</tt> class.Win game screen when winner is determined.
@@ -63,12 +62,20 @@ public class WinScreen extends Screen
     @Override
     public void displayForeground()
     {
-        Player player = game.getCurrentPlayer();
-        
         // Display foreground image with given dimensions
         displayForegroundImage(330, 330);
-        
+        displayBoard();        
+        displayMessage();
+    }
+    
+    private void displayBoard()
+    {
         game.getBoard().display();
+    }
+    
+    private void displayMessage()
+    {
+        Player player = game.getCurrentPlayer();
         
         // Display text to initiate game
         game.fill(getFontColor());

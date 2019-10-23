@@ -22,7 +22,7 @@ public class Human extends Player
      **************************************************************************/
     
     private String name;
-    private Boolean hasGone = false;
+    private boolean hasGone = false;
 
     /***************************************************************************
      *      CONSTRUCTOR
@@ -58,6 +58,7 @@ public class Human extends Player
         else
         {
             game.changeScreen(ScreenType.WIN,Menu.MAIN);
+            if (game.getSoundsOn()) { game.win.trigger(); }
         }
     }
 }

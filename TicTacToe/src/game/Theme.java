@@ -69,6 +69,7 @@ public enum Theme
     
     private String soundFilePath;
     private AudioSample menuClick;
+    private AudioSample gameWin;
     
     /***************************************************************************
      *      CONSTRUCTOR
@@ -155,6 +156,11 @@ public enum Theme
         return menuClick;
     }
     
+    public AudioSample getGameWin()
+    {
+        return gameWin;
+    }
+    
     /***************************************************************************
      *      METHODS
      **************************************************************************/
@@ -165,7 +171,7 @@ public enum Theme
         this.minim = minim;
         loadFont();
         loadImages();
-        //loadSounds();
+        loadSounds();
     }
     
     public void loadFont()
@@ -186,5 +192,6 @@ public enum Theme
     public void loadSounds()
     {
         this.menuClick = minim.loadSample(soundFilePath + "-click.wav");
+        this.gameWin = minim.loadSample(soundFilePath + "-win.wav");
     }
 }

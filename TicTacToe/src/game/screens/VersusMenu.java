@@ -32,6 +32,7 @@ public class VersusMenu extends MenuScreen
         setMenuTitle();
         setLabel(i++, "Computer");
         setLabel(i++, "Human");
+        setLabel(i++, "Back");
     }
     
     /***************************************************************************

@@ -59,7 +59,7 @@ public class InitScreen extends Screen
     } 
     
     @Override
-    public void displayForeground()
+    protected void displayForeground()
     {
         // Display foreground image with given dimensions
         displayForegroundImage(330, 330);

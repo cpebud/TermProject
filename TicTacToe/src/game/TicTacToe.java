@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import ddf.minim.AudioSample;
 import ddf.minim.Minim;
 import game.buttons.GameTile;
 import game.buttons.GameTile.Symbol;
@@ -75,9 +76,11 @@ public class TicTacToe extends PApplet
     /*   Game Difficulty   */
     private Difficulty difficulty = Difficulty.EASY;
         
-    /*   Sounds Settings   */
+    /*   Sounds   */
     Minim minim = new Minim(this);
-    private Boolean soundsOn = true;
+    public AudioSample click;
+    public AudioSample win;
+    private boolean soundsOn = true;
     
     public Player player1 = new Human(this);
     public Player player2 = new Computer(this);
@@ -109,6 +112,9 @@ public class TicTacToe extends PApplet
         loadThemes();
         loadScreens();
         loadButtons();
+        
+        click = getTheme().getMenuClick();
+        win = getTheme().getGameWin();
         
         board = new GameBoard(this);
         
@@ -175,6 +181,7 @@ public class TicTacToe extends PApplet
         switch(currentScreen)
         {
         case INIT:
+            if (getSoundsOn()) { click.trigger(); }
             currentScreens.push(ScreenType.MENU);
             setCurrentScreen();
             break;
@@ -184,8 +191,8 @@ public class TicTacToe extends PApplet
             {
                 if (options[i].isInside(mouseX, mouseY))
                 {
-                    
-                    options[i].getNextScreen(options[i].getLabel());
+                    if (getSoundsOn()) { click.trigger(); }
+                    options[i].getFunction(options[i].getLabel());
                 }
             }
             break;
@@ -198,6 +205,7 @@ public class TicTacToe extends PApplet
                     GameTile tile = board.getTile(i);
                     if (tile.isEmpty() && tile.isInside(mouseX, mouseY)) 
                     {
+                        if (getSoundsOn()) { click.trigger(); }
                         tile.setTileSymbol(currentPlayer.getSymbol());
                         currentPlayer.takeTurn();
                     }
@@ -205,6 +213,7 @@ public class TicTacToe extends PApplet
             }
             break;
         case WIN:
+            if (getSoundsOn()) { click.trigger(); }
             goMainMenu();
             break;
         default:
@@ -315,7 +324,7 @@ public class TicTacToe extends PApplet
      * Gets the current <tt>ScreenType</tt> 
      * @return current screen
      */
-    public ScreenType getScreen()
+    public ScreenType getCurrentScreen()
     {
         return currentScreen;
     }
@@ -485,6 +494,8 @@ public class TicTacToe extends PApplet
     
     private void updateTheme()
     {
+        click = getTheme().getMenuClick();
+        win = getTheme().getGameWin();
         for (Screen screen : screens.values())
         {
             screen.update();
@@ -499,11 +510,6 @@ public class TicTacToe extends PApplet
         {
             tile.update();
         }
-    }
-    
-    public void playGame()
-    {
-        
     }
     
     /***************************************************************************

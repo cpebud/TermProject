@@ -97,7 +97,33 @@ public abstract class Player
         Symbol s = getSymbol();
         
         GameBoard board = game.getBoard();
-        //Check Row Winners
+        
+        int row1[]  = {0, 1, 2};
+        int row2[]  = {3, 4, 5};
+        int row3[]  = {6, 7, 8};
+        
+        int col1[]  = {0, 3, 6};
+        int col2[]  = {1, 4, 7};
+        int col3[]  = {2, 5, 8};
+        
+        int diag1[] = {0, 4, 8};
+        int diag2[] = {2, 4, 6};
+        
+        int[] wins[] = {row1, row2, row3, col1, col2, col3, diag1, diag2};
+        
+        for (int[] win : wins)
+        {
+            winner = true;
+            for (int tile : win)
+            {
+                winner &= board.getTile(tile).getTileSymbol() == s;
+            }
+            if (winner == true) 
+            {
+                return winner;
+            }
+        }
+        /*//Check Row Winners
         if ((board.getTile(0).getTileSymbol() == s) && (board.getTile(1).getTileSymbol() == s) && (board.getTile(2).getTileSymbol() == s))
         {
             winner = true;
@@ -131,7 +157,7 @@ public abstract class Player
         else if ((board.getTile(2).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(6).getTileSymbol() == s))
         {
             winner = true;
-        }
+        }*/
         
         return winner;
     }
