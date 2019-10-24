@@ -145,7 +145,8 @@ public class Computer extends Player
 			}
     	}
     	
-    	//calculates maximum possible point move for self(PC) and the minimum possible point move if not self(human)
+    	//calculates maximum possible point move for self(PC) and the minimum possible point move if final turn at the end of 
+	//recursion is not self(human)
     	if(currTurn == this)
     	{
     		int maxScoreIndex = Collections.max(scores);
