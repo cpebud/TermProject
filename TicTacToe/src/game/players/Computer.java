@@ -138,7 +138,7 @@ public class Computer extends Player
     		if(!game.getBoard().getTile(i).isEmpty())
 			{
 				TicTacToe possibleGame = game; //create a copy of the current game and test the new move
-				possibleGame.getBoard().getTile(i).setTileSymbol(getSymbol());
+				possibleGame.getBoard().getTile(i).setTileSymbol(currTurn.getSymbol());
 				scores.add(minimax(possibleGame,currDepth,setOpposingToken(currTurn)));	//switch players and PC tries possible human move
 				
 				possMoves.add(i);
