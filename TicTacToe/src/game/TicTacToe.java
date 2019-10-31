@@ -24,17 +24,12 @@ import game.players.Computer;
 import game.players.Human;
 import game.players.Player;
 import game.players.Player.PlayerType;
-import game.screens.DifficultyMenu;
 import game.screens.GameScreen;
 import game.screens.InitScreen;
-import game.screens.MainMenu;
 import game.screens.MenuScreen;
 import game.screens.MenuScreen.Menu;
-import game.screens.PauseMenu;
 import game.screens.Screen;
 import game.screens.Screen.ScreenType;
-import game.screens.SettingsMenu;
-import game.screens.ThemesMenu;
 import game.screens.WinScreen;
 import processing.core.PApplet;
 import util.Reference;
@@ -282,12 +277,12 @@ public class TicTacToe extends PApplet
     private void loadScreens()
     {
         screens.put("Initial", new InitScreen(this));
-        screens.put("Main", new MainMenu(this));
+        screens.put("Main", new MenuScreen(this, Menu.MAIN));
         screens.put("Game", new GameScreen(this));
-        screens.put("Pause", new PauseMenu(this));
-        screens.put("Difficulty", new DifficultyMenu(this));
-        screens.put("Settings", new SettingsMenu(this));
-        screens.put("Themes", new ThemesMenu(this));
+        screens.put("Pause", new MenuScreen(this, Menu.PAUSE));
+        screens.put("Difficulty", new MenuScreen(this, Menu.DIFFICULTY));
+        screens.put("Settings", new MenuScreen(this, Menu.SETTINGS));
+        screens.put("Themes", new MenuScreen(this, Menu.THEMES));
         screens.put("Win", new WinScreen(this));
     }
     

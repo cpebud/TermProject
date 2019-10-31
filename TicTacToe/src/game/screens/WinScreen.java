@@ -60,7 +60,7 @@ public class WinScreen extends Screen
     } 
     
     @Override
-    public void displayForeground()
+    protected void displayForeground()
     {
         // Display foreground image with given dimensions
         displayForegroundImage(330, 330);

@@ -58,7 +58,10 @@ public class Human extends Player
         else
         {
             game.changeScreen(ScreenType.WIN,Menu.MAIN);
-            if (game.getSoundsOn()) { game.win.trigger(); }
+            if (game.getSoundsOn() && game.getCurrentPlayer().isWinner())
+            {
+                game.win.trigger(); 
+            }
         }
     }
 }
