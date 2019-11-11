@@ -11,44 +11,48 @@
  ******************************************************************************/
 package game.screens;
 
+import game.Theme;
 import game.TicTacToe;
+import game.buttons.MenuOption;
 
-public abstract class MenuScreen extends Screen
+public class MenuScreen extends Screen
 {
     /***************************************************************************
      *      VARIABLES
      **************************************************************************/
     
+    public static final int NUM_BUTTONS = 6;
+
     private Menu mType;
     private String title;
     private String[] labels = {"","","","","",""};
-    public static final int NUM_BUTTONS = 6;
 
     /***************************************************************************
      *      CONSTRUCTOR
      **************************************************************************/
     
-    public MenuScreen(TicTacToe game)
+    public MenuScreen(TicTacToe game, Menu mType)
     {
         super(game);
+        this.mType = mType;
+
         setType(ScreenType.MENU);
         setForeground(game.getTheme().getMenuForeground());
+
+        setMenuTitle();
+        setLabels();
     }
     
     /***************************************************************************
      *      SETTERS/GETTERS
      **************************************************************************/
     
-    protected void setMenuType(Menu mType) {
-        this.mType = mType;
-    }
-    
     public Menu getMenuType()
     {
         return this.mType;
     }
     
-    protected void setMenuTitle()
+    private void setMenuTitle()
     {
         this.title = getMenuType().getTitle();
     }
@@ -58,7 +62,7 @@ public abstract class MenuScreen extends Screen
         return this.title;
     }
     
-    protected void setLabel(int i, String label)
+    private void setLabel(int i, String label)
     {
         this.labels[i] = label;
     }
@@ -82,13 +86,67 @@ public abstract class MenuScreen extends Screen
         
         displayButtons();
     }
+    
+    
 
-    protected void displayButtons()
+    private void displayButtons()
     {
         for (int i = 0; i < labels.length; i++)
         {
             game.getOption(i).setLabel(this.labels[i]);
             game.getOption(i).display();
+        }
+    }
+    
+    private void setLabels()
+    {
+        int i = 0;
+        switch (mType)
+        {
+        case MAIN:
+            setLabel(i++, "New Game");
+            setLabel(i++, "Difficulty");
+            //setLabel(i++, "Settings");
+            setLabel(i++, "Quit");            
+            break;
+            
+        case PAUSE:
+            setLabel(i++, "Continue Game");
+            setLabel(i++, "New Game");
+            //setLabel(i++, "Settings");
+            setLabel(i++, "Main Menu");
+            setLabel(i++, "Quit");
+            break;
+            
+        case VERSUS:
+            setLabel(i++, "Computer");
+            setLabel(i++, "Human");
+            setLabel(i++, "Back");
+            break;
+            
+        case DIFFICULTY:
+            setLabel(i++, "Easy");
+            setLabel(i++, "Medium");
+            setLabel(i++, "Hard");
+            setLabel(i++, "Back");
+            break;
+            
+        case SETTINGS:
+            setLabel(i++, "Themes");
+            //setLabel(i++, "Sounds");
+            setLabel(i++, "Back");
+            break;
+            
+        case THEMES:
+            for (Theme theme : Theme.values())
+            {
+                setLabel(i++, theme.getLabel());
+            }
+            setLabel(i++,"Back");
+            break;
+            
+        default:
+            break;
         }
     }
 
