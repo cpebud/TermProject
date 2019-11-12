@@ -167,45 +167,48 @@ public class Computer extends Player
     
     public int chooseSpace(TicTacToe aGame)
     {
-    	return calcBestMove(aGame,0, new HashMap<>());
+    	return minimax(aGame,0, new HashMap<>());
     }
     
-    private int calcBestMove(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOutcomes)
+    private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOutcomes)
     {
     	if(isGameTied(aGame))
+    		//end recursion if the game is tied
     		return 0;
     	else if(aGame.getBoard().isWinner(Symbol.EX) || aGame.getBoard().isWinner(Symbol.OH))
+    		//end recursion if here's a winner
     		return -1;
     	else
     	{
     		for(int space = 0; space < 9; space++)
     		{
+    			//will try a hypthetical move only if the tile is empty
     			if(aGame.getBoard().getTile(space).isEmpty())
     			{  
-    				System.out.println("open space:" + space);
+    				//try the hypothetical move
     				aGame.getBoard().getTile(space).setTileSymbol(aGame.getCurrentPlayer().getSymbol());
+    				//switch tokens so computer can calculate hypothetical opponent move
     				aGame.nextPlayer();
-        			potentialOutcomes.put(space, (-1 * calcBestMove(aGame, depth + 1, new HashMap<>())));
+        			potentialOutcomes.put(space, (-1 * minimax(aGame, depth + 1, new HashMap<>())));
         			aGame.getBoard().resetSpace(space);  
         			aGame.nextPlayer();
         		}    			
     		}
     		
-			System.out.println("depth: " + depth + " bestMove: " + potentialOutcomes.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey()) ;
     		if(depth == 0 || aGame.getBoard().isWinner(aGame.player2.getSymbol()))
     		{
+    			//if a move was found at the top layer of depth or the computer has won the hypthetical game, find the move using the map that
+    			//maximizes the computer's chances of winning
     			return potentialOutcomes.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
 
     		}
     		else
     		{
+    			//minimize opponent's chances
     			return potentialOutcomes.entrySet().stream().min(Map.Entry.comparingByValue()).get().getKey();
 
     		}
  
     	}
-    }
-    
-
-    
+    }    
 }
