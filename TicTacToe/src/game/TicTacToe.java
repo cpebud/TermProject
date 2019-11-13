@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright © 2019. All rights reserved.
+ * Copyright Â© 2019. All rights reserved.
  ******************************************************************************/
 package game;
 
@@ -24,12 +24,17 @@ import game.players.Computer;
 import game.players.Human;
 import game.players.Player;
 import game.players.Player.PlayerType;
+import game.screens.DifficultyMenu;
 import game.screens.GameScreen;
 import game.screens.InitScreen;
+import game.screens.MainMenu;
 import game.screens.MenuScreen;
 import game.screens.MenuScreen.Menu;
+import game.screens.PauseMenu;
 import game.screens.Screen;
 import game.screens.Screen.ScreenType;
+import game.screens.SettingsMenu;
+import game.screens.ThemesMenu;
 import game.screens.WinScreen;
 import processing.core.PApplet;
 import util.Reference;
@@ -208,7 +213,7 @@ public class TicTacToe extends PApplet
             }
             break;
         case WIN:
-            if (getSoundsOn()) { click.trigger(); }
+           
             goMainMenu();
             break;
         default:
@@ -277,12 +282,12 @@ public class TicTacToe extends PApplet
     private void loadScreens()
     {
         screens.put("Initial", new InitScreen(this));
-        screens.put("Main", new MenuScreen(this, Menu.MAIN));
+        screens.put("Main", new MainMenu(this));
         screens.put("Game", new GameScreen(this));
-        screens.put("Pause", new MenuScreen(this, Menu.PAUSE));
-        screens.put("Difficulty", new MenuScreen(this, Menu.DIFFICULTY));
-        screens.put("Settings", new MenuScreen(this, Menu.SETTINGS));
-        screens.put("Themes", new MenuScreen(this, Menu.THEMES));
+        screens.put("Pause", new PauseMenu(this));
+        screens.put("Difficulty", new DifficultyMenu(this));
+        screens.put("Settings", new SettingsMenu(this));
+        screens.put("Themes", new ThemesMenu(this));
         screens.put("Win", new WinScreen(this));
     }
     
@@ -354,6 +359,21 @@ public class TicTacToe extends PApplet
     public Player getCurrentPlayer()
     {
         return currentPlayer;
+    }
+    
+    public Player setOpposingToken()
+    {
+    	if(currentPlayer.getSymbol() == Symbol.EX)
+    		currentPlayer.setSymbol(Symbol.OH);
+    	else if(currentPlayer.getSymbol() == Symbol.OH)
+    		currentPlayer.setSymbol(Symbol.EX); 
+    	
+    	if(currentPlayer.getType() == PlayerType.COMPUTER)
+    		currentPlayer.setType(PlayerType.HUMAN);
+    	else if(currentPlayer.getType() == PlayerType.HUMAN)
+    		currentPlayer.setType(PlayerType.COMPUTER);
+    		
+    	return currentPlayer;
     }
 
     /** 
@@ -460,6 +480,20 @@ public class TicTacToe extends PApplet
         }
     }
     
+    public void switchTokens()
+    {
+    	if(player1.getSymbol() == Symbol.EX)
+    	{
+    		player2.setSymbol(Symbol.EX);
+    		player1.setSymbol(Symbol.OH);
+    	}
+    	else if(player1.getSymbol() == Symbol.OH)
+    	{
+    		player2.setSymbol(Symbol.OH);
+    		player1.setSymbol(Symbol.EX);
+    	}
+    }
+    
     public void nextPlayer()
     {
         if (currentPlayer == player1)
@@ -471,6 +505,7 @@ public class TicTacToe extends PApplet
             setCurrentPlayer(player1);
         }
     }
+    
     
     public void updateDifficulty(Difficulty difficulty)
     {
@@ -506,6 +541,8 @@ public class TicTacToe extends PApplet
             tile.update();
         }
     }
+    
+
     
     /***************************************************************************
      *      ENUMERATORS

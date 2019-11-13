@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright © 2019. All rights reserved.
+ * Copyright Â© 2019. All rights reserved.
  ******************************************************************************/
 package game.players;
 
@@ -17,6 +17,9 @@ import game.GameBoard;
 import game.TicTacToe;
 import game.TicTacToe.Difficulty;
 import game.buttons.GameTile.Symbol;
+import game.screens.MenuScreen.Menu;
+import game.screens.Screen.ScreenType;
+
 
 
 public class Computer extends Player
@@ -28,7 +31,7 @@ public class Computer extends Player
     private Difficulty difficulty;
     private ArrayList<Integer> scores = new ArrayList<Integer>();
     private ArrayList<Integer> possMoves = new ArrayList<Integer>();
-
+    int theDepth = 0;
 
 
     /***************************************************************************
@@ -53,20 +56,7 @@ public class Computer extends Player
         this.difficulty = difficulty;
     }
     
-    private Player setOpposingToken(Player currentPlayer)
-    {
-    	if(currentPlayer.getSymbol() == Symbol.EX)
-    		currentPlayer.setSymbol(Symbol.OH);
-    	else if(currentPlayer.getSymbol() == Symbol.OH)
-    		currentPlayer.setSymbol(Symbol.EX); 
-    	
-    	if(currentPlayer.getType() == PlayerType.COMPUTER)
-    		currentPlayer.setType(PlayerType.HUMAN);
-    	else if(currentPlayer.getType() == PlayerType.HUMAN)
-    		currentPlayer.setType(PlayerType.COMPUTER);
-    		
-    	return currentPlayer;
-    }
+   
     
     /***************************************************************************
      *      METHODS
@@ -90,15 +80,47 @@ public class Computer extends Player
         case MEDIUM:
             break;
         case HARD:
-        	if(super.getTurn() >= 2)
-        		easyTurn();
+        	
+        	if(getTurn() == 0)
+        		hardEasyTurn();
         	else
-        		minimax(game,0,this);
+        	{
+        		
+        		game.switchTokens();
+        		int bestMoveBlock = chooseSpace(game);
+        		game.switchTokens();
+        		
+        		int bestMoveWin = chooseSpace(game);
         		
         		
+        		game.getBoard().getTile(bestMoveWin).setTileSymbol(getSymbol());
+
+        		//computer tries to win but if the move doesnt end up in a dub for pc then it
+        		//plays defense
+        		if(!game.player2.isWinner())
+        		{
+        			game.getBoard().resetSpace(bestMoveWin);
+        			
+        			game.getBoard().getTile(bestMoveBlock).setTileSymbol(getSymbol());
+        		}
+        			
+        	}
+        	
+		
             break;
+                      
         }
         incTurn();
+        
+        if (!isWinner() && !game.getBoard().isFull()) 
+        {
+            game.nextPlayer();
+        }
+        else
+        {
+            game.changeScreen(ScreenType.WIN, Menu.MAIN);
+        }
+       
     }
     
     private void easyTurn()
@@ -115,59 +137,78 @@ public class Computer extends Player
         }
     }
     
-    public int score(int depth)
+    public void hardEasyTurn()
     {
-    	if(isWinner() && getType() == PlayerType.COMPUTER)
-    		return 10 - depth;
-    	else if(isWinner() && getType() == PlayerType.HUMAN)
-    		return depth - 10;
-    	else
-    		return 0;    		
+    	 if (!game.getBoard().isFull())
+         {
+             int random = (int)(Math.random() * GameBoard.NUM_TILES);
+             while (!game.getBoard().getTile(random).isEmpty())
+             {
+                 random = (int)(Math.random() * GameBoard.NUM_TILES);
+             }
+             game.getBoard().getTile(random).setTileSymbol(getSymbol());
+         }
     }
     
-    public int minimax(TicTacToe game, int currDepth, Player currTurn)
+    public boolean isGameTied(TicTacToe temp)
     {
-    	if((currDepth > 9) || game.getBoard().isWinner(super.getSymbol()))
-    		return score(currDepth);
     	
-    	currDepth += 1;
+    	return (temp.getBoard().isFull()
+    		&& !temp.getBoard().isWinner(Symbol.EX)
+    		&& !temp.getBoard().isWinner(Symbol.OH));
+	}
+    
+    public boolean isGameOver(TicTacToe game)
+    {
     	
-    	//uses recursion to check every possible iteration of moves for each open tile
-    	for(int i = 0; i < 9; i++)
-    	{
-    		if(!game.getBoard().getTile(i).isEmpty())
-			{
-				TicTacToe possibleGame = game; //create a copy of the current game and test the new move
-				possibleGame.getBoard().getTile(i).setTileSymbol(currTurn.getSymbol());
-				scores.add(minimax(possibleGame,currDepth,setOpposingToken(currTurn)));	//switch players and PC tries possible human move
-				
-				possMoves.add(i);
-			}
-    	}
     	
-    	//calculates maximum possible point move for self(PC) and the minimum possible point move if final turn at the end of 
-	//recursion is not self(human)
-    	if(currTurn == this)
-    	{
-    		int maxScoreIndex = Collections.max(scores);
-    		
-    		//once pc finds best possible move for self make move and display on board
-    		game.getBoard().getTile(maxScoreIndex).setTileSymbol(getSymbol());
-    		
-    		return scores.get(maxScoreIndex);
-    	}
+    	return(game.getBoard().isFull());
+    }
+    
+    public int chooseSpace(TicTacToe aGame)
+    {
+    	return minimax(aGame,0, new HashMap<>());
+    }
+    
+    private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOutcomes)
+    {
+    	if(isGameTied(aGame))
+    		//end recursion if the game is tied
+    		return 0;
+    	else if(aGame.getBoard().isWinner(Symbol.EX) || aGame.getBoard().isWinner(Symbol.OH))
+    		//end recursion if here's a winner
+    		return -1;
     	else
     	{
-    		int minScoreIndex = Collections.min(scores);
-    		game.getBoard().getTile(minScoreIndex).setTileSymbol(getSymbol());
+    		for(int space = 0; space < 9; space++)
+    		{
+    			//will try a hypthetical move only if the tile is empty
+    			if(aGame.getBoard().getTile(space).isEmpty())
+    			{  
+    				//try the hypothetical move
+    				aGame.getBoard().getTile(space).setTileSymbol(aGame.getCurrentPlayer().getSymbol());
+    				//switch tokens so computer can calculate hypothetical opponent move
+    				aGame.nextPlayer();
+        			potentialOutcomes.put(space, (-1 * minimax(aGame, depth + 1, new HashMap<>())));
+        			aGame.getBoard().resetSpace(space);  
+        			aGame.nextPlayer();
+        		}    			
+    		}
     		
-    		//if not currentTurn then pc picks move that results in least amount of points for human
-    		game.getBoard().getTile(minScoreIndex).setTileSymbol(getSymbol());
+    		if(depth == 0 || aGame.getBoard().isWinner(aGame.player2.getSymbol()))
+    		{
+    			//if a move was found at the top layer of depth or the computer has won the hypthetical game, find the move using the map that
+    			//maximizes the computer's chances of winning
+    			return potentialOutcomes.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
 
-    		
-    		return scores.get(minScoreIndex);
+    		}
+    		else
+    		{
+    			//minimize opponent's chances
+    			return potentialOutcomes.entrySet().stream().min(Map.Entry.comparingByValue()).get().getKey();
+
+    		}
+ 
     	}
-		
-       	
-    }
+    }    
 }
