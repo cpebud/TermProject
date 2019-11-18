@@ -29,10 +29,10 @@ public class Computer extends Player
      **************************************************************************/
     
     private Difficulty difficulty;
-    private ArrayList<Integer> scores = new ArrayList<Integer>();
-    private ArrayList<Integer> possMoves = new ArrayList<Integer>();
+   
     int theDepth = 0;
-
+    int nextMove = -1;
+    Boolean nextMoveWins = false;
 
     /***************************************************************************
      *      CONSTRUCTOR
@@ -81,11 +81,15 @@ public class Computer extends Player
             break;
         case HARD:
         	
-        	if(getTurn() == 0)
-        		hardEasyTurn();
-        	else
-        	{
+        		int ultimateScore = minimax(this.game,0);
         		
+        		if(ultimateScore != 0 && nextMove != -1)
+        		{
+        			
+        			game.getBoard().getTile(nextMove).setTileSymbol(game.player2.getSymbol());
+        		}
+        		
+        		/*
         		game.switchTokens();
         		int bestMoveBlock = chooseSpace(game);
         		game.switchTokens();
@@ -104,7 +108,7 @@ public class Computer extends Player
         			game.getBoard().getTile(bestMoveBlock).setTileSymbol(getSymbol());
         		}
         			
-        	}
+        		*/
         	
 		
             break;
@@ -150,29 +154,120 @@ public class Computer extends Player
          }
     }
     
-    public boolean isGameTied(TicTacToe temp)
-    {
-    	
-    	return (temp.getBoard().isFull()
-    		&& !temp.getBoard().isWinner(Symbol.EX)
-    		&& !temp.getBoard().isWinner(Symbol.OH));
-	}
+   
     
     public boolean isGameOver(TicTacToe game)
     {
     	
     	
     	return(game.getBoard().isFull());
+    	
+    	
+    	
     }
     
+    int score(TicTacToe game, int depth)
+    {
+    	if(game.player2.isWinner())
+    		return 10 - depth;
+    	else if(game.player1.isWinner())
+    		return depth - 10;
+    	else 
+    		return 0;
+    }
+    	
+    
+    int minimax(TicTacToe game, int depth)
+    {
+    	if(game.getCurrentPlayer().isWinner() || game.getBoard().isFull())
+    	{
+    		return score(game, depth);
+    	}
+    		
+    	
+    	depth += 1;
+    	
+    	 ArrayList<Integer> scores = new ArrayList<Integer>();
+    	 ArrayList<Integer> moves = new ArrayList<Integer>();
+
+    	TicTacToe possibleGame = game;
+    	
+    	for(int i = 0; i < 9; i++)
+    	{    		
+    		if(game.getBoard().getTile(i).isEmpty())
+    		{
+    			possibleGame.getNewState(possibleGame, i);
+    			 
+    			if(game.getCurrentPlayer().isWinner())
+    				nextMoveWins = true;
+    			
+    			scores.add(minimax(possibleGame, depth));
+    			
+    			moves.add(i);
+    			
+    			
+    			possibleGame.getBoard().resetSpace(i); 	
+    			
+    		}    	
+    	}
+    	
+    	if(nextMoveWins)
+    	{
+    		int max_score_index = 0;
+    		
+    		int maxScore = 0;
+    		
+    		for(int i = 0; i < scores.size(); i++)
+    		{
+    			System.out.println(scores.get(i));
+    			if(scores.get(i) > maxScore)
+    			{
+    				maxScore = scores.get(i);
+        			max_score_index = i;
+    			}
+    				
+    		}
+    		
+    		nextMove = moves.get(max_score_index);
+    		
+    		
+    		System.out.println("try to win");
+    		return scores.get(max_score_index);
+    	}
+    	else
+    	{
+    		int min_score_index = 0;
+    		int minScore = 0;
+    		    		
+    		for(int i = 0; i < scores.size(); i++)
+    		{
+    			if(scores.get(i) < minScore)
+    			{
+    				minScore = scores.get(i);
+        			min_score_index = i;
+    			}
+    				
+    		}
+    		nextMove = moves.get(min_score_index);
+    		
+    		System.out.println("try to block");
+    		return scores.get(min_score_index);
+    	}
+    	
+    	
+    	
+	}
+} 
+    
+    /*           
     public int chooseSpace(TicTacToe aGame)
     {
     	return minimax(aGame,0, new HashMap<>());
     }
-    
-    private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOutcomes)
+   
+private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOutcomes)
     {
-    	if(isGameTied(aGame))
+    	if(catsGame(aGame))
     		//end recursion if the game is tied
     		return 0;
     	else if(aGame.getBoard().isWinner(Symbol.EX) || aGame.getBoard().isWinner(Symbol.OH))
@@ -180,7 +275,7 @@ public class Computer extends Player
     		return -1;
     	else
     	{
-    		for(int space = 0; space < 9; space++)
+    		for(int space =  0; space < 9; space++)
     		{
     			//will try a hypthetical move only if the tile is empty
     			if(aGame.getBoard().getTile(space).isEmpty())
@@ -210,5 +305,7 @@ public class Computer extends Player
     		}
  
     	}
-    }    
-}
+    } 
+*/
+
+
