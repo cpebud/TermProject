@@ -361,6 +361,38 @@ public class TicTacToe extends PApplet
         return currentPlayer;
     }
     
+    public Player getOtherPlayer()
+    {
+    	Player otherPlayer = currentPlayer;
+    	
+    	 if (currentPlayer == player1)
+         {
+             otherPlayer = player2;
+         }
+         else if (currentPlayer == player2)
+         {
+             otherPlayer = player1;
+         }
+    	 
+    	 return otherPlayer;
+    }
+    
+    public TicTacToe getNewState(TicTacToe possGame, int move)
+    {
+    	
+    	possGame.getBoard().getTile(move).setTileSymbol(currentPlayer.getSymbol());
+    	
+    	return possGame;
+    }
+    
+    public boolean catsGame(TicTacToe game)
+    {
+    	
+    	return (game.getBoard().isFull()
+    		&& !game.getBoard().isWinner(Symbol.EX)
+    		&& !game.getBoard().isWinner(Symbol.OH));
+	}
+    
     public Player setOpposingToken()
     {
     	if(currentPlayer.getSymbol() == Symbol.EX)
