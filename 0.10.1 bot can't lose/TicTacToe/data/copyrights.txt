@@ -1,0 +1,22 @@
+#-------------------------------------------------------------------------------
+# File Name:			
+# Project:			
+# 
+# Designer(s):		Garrett Cross,
+# 					Omar Kermiche,
+# 					Autumn Nguyen,
+# 					Thomas Pridy
+# 
+# Copyright © 2019. All rights reserved.
+#-------------------------------------------------------------------------------
+Chalkboard Background	
+	http://www.textures4photoshop.com/tex/isolated-objects/blank-chalkboard-background-with-border.aspx
+
+Chalkboard Font
+	https://www.1001fonts.com/grafipaint-font.html
+
+Chalkboard Soundfx
+	https://www.zapsplat.com/sound-effect-category/chalk-and-chalkboards/
+
+Retro Font
+	https://www.1001fonts.com/pc-senior-font.html
