@@ -417,20 +417,20 @@ public class TicTacToe extends PApplet
         return player2;
     }
     
-    public Player setOpposingToken()
-    {
-    	if(currentPlayer.getSymbol() == Symbol.EX)
-    		currentPlayer.setSymbol(Symbol.OH);
-    	else if(currentPlayer.getSymbol() == Symbol.OH)
-    		currentPlayer.setSymbol(Symbol.EX); 
-    	
-    	if(currentPlayer.getType() == PlayerType.COMPUTER)
-    		currentPlayer.setType(PlayerType.HUMAN);
-    	else if(currentPlayer.getType() == PlayerType.HUMAN)
-    		currentPlayer.setType(PlayerType.COMPUTER);
-    		
-    	return currentPlayer;
-    }
+//    public Player setOpposingToken()
+//    {
+//    	if(currentPlayer.getSymbol() == Symbol.EX)
+//    		currentPlayer.setSymbol(Symbol.OH);
+//    	else if(currentPlayer.getSymbol() == Symbol.OH)
+//    		currentPlayer.setSymbol(Symbol.EX); 
+//    	
+//    	if(currentPlayer.getType() == PlayerType.COMPUTER)
+//    		currentPlayer.setType(PlayerType.HUMAN);
+//    	else if(currentPlayer.getType() == PlayerType.HUMAN)
+//    		currentPlayer.setType(PlayerType.COMPUTER);
+//    		
+//    	return currentPlayer;
+//    }
 
     /** 
      * Sets the difficulty of the computer player
