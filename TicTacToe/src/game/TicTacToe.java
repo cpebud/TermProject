@@ -208,7 +208,6 @@ public class TicTacToe extends PApplet
                         if (getSoundsOn()) { click.trigger(); }
                         tile.setTileSymbol(currentPlayer.getSymbol());
                         currentPlayer.takeTurn();
-                        board.printLineScores();
                     }
                 }
             }
@@ -257,7 +256,6 @@ public class TicTacToe extends PApplet
             if (getCurrentPlayer().getType() == PlayerType.COMPUTER)
             {
                 getCurrentPlayer().takeTurn();
-                board.printLineScores();
             }
             break;
             

@@ -11,6 +11,8 @@
  ******************************************************************************/
 package game;
 
+import java.util.*;
+
 import game.buttons.GameTile;
 import game.buttons.GameTile.Symbol;
 
@@ -102,19 +104,6 @@ public class GameBoard
         return true;
     }
     
-    public void printLineScores()
-    {
-        int[][] lineScores = lineScores();
-        for (int i = 0; i < lineScores.length; i++) { 
-            for (int j = 0; j < lineScores[i].length; j++) { 
-                System.out.print(lineScores[i][j] + " "); 
-            } 
-  
-            System.out.println(); 
-        } 
-        System.out.println();
-    }
-    
     public void updateHint(int tIndex)
     {
         if (tIndex != -1)
@@ -137,12 +126,12 @@ public class GameBoard
                     this.hint = "You could be forking.";
                 }
             }
-            else if (!checkBlockFork(tIndex, true))
+            else if (!checkBlockFork(tIndex))
             {
-                //if (!checkWinTile(tIndex, false) && !checkBlockTile(tIndex, false) && !checkWinFork(tIndex, false))
-                //{
+                if (!checkWinTile(tIndex, false) && !checkBlockTile(tIndex, false) && !checkWinFork(tIndex, false))
+                {
                     this.hint = "Don't get forked.";
-                //}
+                }
             }
             else
             {
@@ -160,7 +149,7 @@ public class GameBoard
     {        
         boolean isGoodTile = isHint;
         
-        int[][] lineScores = lineScores();
+        int[][] lineScores = lineScores(this.tiles);
         for(int[] line : lineScores)
         {
             if (line[0] == 2)
@@ -182,7 +171,7 @@ public class GameBoard
     {        
         boolean isGoodTile = isHint;
         
-        int[][] lineScores = lineScores();
+        int[][] lineScores = lineScores(this.tiles);
         for (int[] line : lineScores)
         {
             if (line[0] == -2)
@@ -224,31 +213,7 @@ public class GameBoard
         return isGoodTile;
     }
     
-    public boolean checkBlockFork(int tIndex, boolean isHint)
-    {
-        boolean isGoodTile = isHint;
-        
-        for (int i = 0; i < tiles.length; i++)
-        {
-            if (tiles[i].isEmpty())
-            {
-                if(forkBlockTile(i))
-                {
-                    if (i == tIndex)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        isGoodTile = false;
-                    }
-                }
-            }
-        }
-        return isGoodTile;
-    }
-    
-    public boolean forkWinTile(int tIndex)
+    private boolean forkWinTile(int tIndex)
     {
         boolean isGoodTile = false;
         
@@ -257,7 +222,7 @@ public class GameBoard
         tempBoard[tIndex].setTileSymbol(pSymbol);
         
         int count = 0;
-        int[][] lineScores = lineScores();
+        int[][] lineScores = lineScores(tempBoard);
         for (int[] line : lineScores)
         {
             if (line[0] == 2)
@@ -273,7 +238,64 @@ public class GameBoard
         return isGoodTile;
     }
     
-    public boolean forkBlockTile(int tIndex)
+    public boolean checkBlockFork(int tIndex)
+    {       
+        boolean isGoodTile = true;
+        HashSet<Integer> fIndices = new HashSet<>();
+        int fIndex = -1;
+        
+        int count = 0;
+        for (int i = 0; i < tiles.length; i++)
+        {
+            if (tiles[i].isEmpty())
+            {
+                if (forkBlockTile(i))
+                {
+                    count++;
+                    fIndex = i;
+                    fIndices.add(fIndex);
+                }
+            }
+        }
+        if (count == 1)
+        {
+            if (fIndex != tIndex)
+            {
+                isGoodTile = false;
+            }
+        }
+        else if (count > 1)
+        {
+            isGoodTile = false;
+            
+            Symbol pSymbol = game.getCurrentPlayer().getSymbol();
+            GameTile[] tempBoard = tempBoard();
+            
+            tempBoard[tIndex].setTileSymbol(pSymbol);
+            for (int[] line : lineScores(tempBoard))
+            {
+                if (line[0] == 2)
+                {
+                    for (int index : fIndices)
+                    {
+                        if (line[1] == index)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            isGoodTile = true;
+                        }
+                    }
+                }
+            }
+            tempBoard[tIndex].setTileSymbol(Symbol.EMPTY);
+        }
+        
+        return isGoodTile;
+    }
+    
+    private boolean forkBlockTile(int tIndex)
     {
         boolean isGoodTile = false;
         
@@ -282,13 +304,12 @@ public class GameBoard
         tempBoard[tIndex].setTileSymbol(oSymbol);
         
         int count = 0;
-        int[][] lineScores = lineScores();
+        int[][] lineScores = lineScores(tempBoard);
         for(int[] line : lineScores)
         {
             if (line[0] == -2)
             {
                 count++;
-                System.out.println("found a win");
             }
         }
         if (count == 2)
@@ -298,7 +319,7 @@ public class GameBoard
         return isGoodTile;
     }
     
-    public int[][] lineScores()
+    private int[][] lineScores(GameTile[] board)
     {        
         Symbol pSymbol = game.getCurrentPlayer().getSymbol();
         Symbol oSymbol = game.getCurrentPlayer().opponentSymbol();
@@ -324,7 +345,7 @@ public class GameBoard
             int tile = -1;
             for (int tIndex : lines[i])
             {
-                Symbol tSymbol = getTile(tIndex).getTileSymbol();
+                Symbol tSymbol = board[tIndex].getTileSymbol();
                 if (tSymbol == pSymbol)
                 {
                     count++;
