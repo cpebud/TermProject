@@ -89,17 +89,17 @@ public class WinScreen extends Screen
         
             if (player == game.player1)
             {
-                game.text("You won... Good job. :I", getWidth()/2, 25*getHeight()/32);
+                game.text("You won... Good job... :I", getWidth()/2, 25*getHeight()/32);
             }
             else if (player == game.player2)
             {
                 switch (player.getType())
                 {
                 case HUMAN:
-                    game.text("You won... Good job. :I", getWidth()/2, 25*getHeight()/32);
+                    game.text("You won... Good job... :I", getWidth()/2, 25*getHeight()/32);
                     break;
                 case COMPUTER:
-                    game.text("The Computer won! You Lose! Good Job! :D", getWidth()/2, 25*getHeight()/32);
+                    game.text("The Computer won! You're a loser! Good Job! :D", getWidth()/2, 25*getHeight()/32);
                     break;
                 }
             }
