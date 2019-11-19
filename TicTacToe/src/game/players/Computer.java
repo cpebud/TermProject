@@ -31,7 +31,9 @@ public class Computer extends Player
     private Difficulty difficulty;
    
     int theDepth = 0;
-    int nextMove = -1;
+    int nextMove = 0;
+    int firstMove = 0;
+    int immediateBlock = 0;
     Boolean nextMoveWins = false;
 
     /***************************************************************************
@@ -81,36 +83,51 @@ public class Computer extends Player
             break;
         case HARD:
         	
-        		int ultimateScore = minimax(this.game,0);
-        		
-        		if(ultimateScore != 0 && nextMove != -1)
+        		//Will make sure that the bot's first move is the center tile unless the human's first move is the center tile,
+        		//in which case it is impossible for the bot to get forked.
+        		if(getTurn() == 0)
         		{
-        			
-        			game.getBoard().getTile(nextMove).setTileSymbol(game.player2.getSymbol());
+        			if(game.player1.getSymbol() == Symbol.EX)
+         			{
+         				if(game.getBoard().getTile(4).isEmpty())
+         				{
+         					game.getBoard().getTile(4).setTileSymbol(getSymbol());
+         					firstMove = 4;
+         				}     					
+         				else
+         					game.getBoard().getTile(0).setTileSymbol(getSymbol());
+         			}
+         			else
+         			{
+     					game.getBoard().getTile(4).setTileSymbol(getSymbol());
+     					firstMove = 4;
+         			}
         		}
-        		
-        		/*
-        		game.switchTokens();
-        		int bestMoveBlock = chooseSpace(game);
-        		game.switchTokens();
-        		
-        		int bestMoveWin = chooseSpace(game);
-        		
-        		
-        		game.getBoard().getTile(bestMoveWin).setTileSymbol(getSymbol());
+        		else
+        		{
+        			if(firstMove == 4 && game.player1.getSymbol() == Symbol.EX && game.getBoard().getTile(4).getTileSymbol()== game.player1.getSymbol())
+        			{
+        	        		cantGetForkedTurn();
+        			}
+        			else
+        			{
+        				int blockFork = -1;
+        			
+        				blockFork = stopFork();
+        				
+        				System.out.println("blockFork: " + blockFork);
+        				
+        				if(blockFork != -1)
+        				{
+         					game.getBoard().getTile(blockFork).setTileSymbol(getSymbol());
+        				}
+        				else
+        				{
+        	        		cantGetForkedTurn();
+        				}
+        			}
+        		}
 
-        		//computer tries to win but if the move doesnt end up in a dub for pc then it
-        		//plays defense
-        		if(!game.player2.isWinner())
-        		{
-        			game.getBoard().resetSpace(bestMoveWin);
-        			
-        			game.getBoard().getTile(bestMoveBlock).setTileSymbol(getSymbol());
-        		}
-        			
-        		*/
-        	
-		
             break;
                       
         }
@@ -125,6 +142,125 @@ public class Computer extends Player
             game.changeScreen(ScreenType.WIN, Menu.MAIN);
         }
        
+    }
+    
+    public int stopFork()
+    {
+    	int row1[]  = {0, 3, 6};
+        int row3[]  = {2, 5, 8};
+        int col1[]  = {0, 1, 2};
+        int col3[]  = {6, 7, 8};
+        
+        int stopFork = -1;
+
+        
+        System.out.println("Human token: " + game.player1.getSymbol());
+        System.out.println("Computer token: " + game.player2.getSymbol());
+
+        int corners[] = {0,2,6,8};
+        
+       for(int i = 0; i<4;i++)
+       {
+    	   int score = 0;
+    	   
+    	   switch(corners[i])
+    	   {
+    	   case 0: 
+    		   score = scoreRow(row1, score);
+    		   score = scoreRow(col1, score);
+    		   break;
+    	   case 2: 
+    		   score = scoreRow(col1, score);
+    		   score = scoreRow(row3, score);
+    		   break;
+    	   case 6:
+    		   score = scoreRow(row1, score);
+    		   score = scoreRow(col3, score);
+    		   break;
+    	   case 8:
+    		   score = scoreRow(col3, score);
+    		   score = scoreRow(col1, score);
+    		   break;
+    	   }
+    	   
+    	   if(score == 2 && game.getBoard().getTile(corners[i]).getTileSymbol() == Symbol.EMPTY)
+    	   {
+    		   stopFork = corners[i];
+    		   break;
+    	   }
+    		   
+       }
+        
+        return stopFork;
+        	
+    }
+    
+    public int scoreRow(int[] tileArr, int score)
+    {
+       for(int tile: tileArr)
+	   {
+		   if(game.getBoard().getTile(tile).getTileSymbol() == game.player1.getSymbol())
+			   score++;
+		   else if(game.getBoard().getTile(tile).getTileSymbol() == game.player2.getSymbol())
+			   score--;
+	   }
+       
+       return score;
+    }
+    
+    public int findCommonTile(int[] numArray1, 
+    						  int[] numArray2)
+    {    	
+    	int forkTile = -1;
+    	for(int tile1 : numArray1)
+    	{
+    		for(int tile2 : numArray2)
+			{
+				if(tile1 == tile2)
+				{					
+	    			if(game.getBoard().getTile(tile1).getTileSymbol() == Symbol.EMPTY)
+	    			{
+						forkTile = tile1;
+						break;
+	    			}    			
+				}
+					
+			}
+    	}
+    	
+    	return forkTile;
+			
+				
+    }
+    
+    public static boolean isPresent(int[] a, int target)
+    {
+    	for (int i : a) {
+    		if (target == i) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    private void cantGetForkedTurn()
+    {
+    	game.switchTokens();
+		int bestMoveBlock = chooseSpace(game);
+		game.switchTokens();
+		
+		int bestMoveWin = chooseSpace(game);
+		
+		
+		game.getBoard().getTile(bestMoveWin).setTileSymbol(getSymbol());
+
+		//computer tries to win but if the move doesnt end up in a dub for pc then it
+		//plays defense
+		if(!game.player2.isWinner())
+		{
+			game.getBoard().resetSpace(bestMoveWin);
+			
+			game.getBoard().getTile(bestMoveBlock).setTileSymbol(getSymbol());
+		}
     }
     
     private void easyTurn()
@@ -166,104 +302,74 @@ public class Computer extends Player
     	
     }
     
-    int score(TicTacToe game, int depth)
-    {
-    	if(game.player2.isWinner())
-    		return 10 - depth;
-    	else if(game.player1.isWinner())
-    		return depth - 10;
-    	else 
-    		return 0;
-    }
-    	
-    
-    int minimax(TicTacToe game, int depth)
-    {
-    	if(game.getCurrentPlayer().isWinner() || game.getBoard().isFull())
-    	{
-    		return score(game, depth);
-    	}
-    		
-    	
-    	depth += 1;
-    	
-    	 ArrayList<Integer> scores = new ArrayList<Integer>();
-    	 ArrayList<Integer> moves = new ArrayList<Integer>();
 
-    	TicTacToe possibleGame = game;
     	
-    	for(int i = 0; i < 9; i++)
-    	{    		
-    		if(game.getBoard().getTile(i).isEmpty())
-    		{
-    			possibleGame.getNewState(possibleGame, i);
-    			 
-    			if(game.getCurrentPlayer().isWinner())
-    				nextMoveWins = true;
-    			
-    			scores.add(minimax(possibleGame, depth));
-    			
-    			moves.add(i);
-    			
-    			
-    			possibleGame.getBoard().resetSpace(i); 	
-    			
-    		}    	
-    	}
-    	
-    	if(nextMoveWins)
-    	{
-    		int max_score_index = 0;
-    		
-    		int maxScore = 0;
-    		
-    		for(int i = 0; i < scores.size(); i++)
-    		{
-    			System.out.println(scores.get(i));
-    			if(scores.get(i) > maxScore)
-    			{
-    				maxScore = scores.get(i);
-        			max_score_index = i;
-    			}
-    				
-    		}
-    		
-    		nextMove = moves.get(max_score_index);
-    		
-    		
-    		System.out.println("try to win");
-    		return scores.get(max_score_index);
-    	}
-    	else
-    	{
-    		int min_score_index = 0;
-    		int minScore = 0;
-    		    		
-    		for(int i = 0; i < scores.size(); i++)
-    		{
-    			if(scores.get(i) < minScore)
-    			{
-    				minScore = scores.get(i);
-        			min_score_index = i;
-    			}
-    				
-    		}
-    		nextMove = moves.get(min_score_index);
-    		
-    		System.out.println("try to block");
-    		return scores.get(min_score_index);
-    	}
-    	
-    	
-    	
-	}
-} 
+    public Boolean player1about2Win(TicTacToe game)
+    {
+    	//Boolean Variable
+        boolean aboutToWin = false;
+        Symbol s = game.player1.getSymbol();
+        int theEmptyTile = 0;
+        
+        GameBoard board = game.getBoard();
+        
+        int row1[]  = {0, 1, 2};
+        int row2[]  = {3, 4, 5};
+        int row3[]  = {6, 7, 8};
+         
+        int col1[]  = {0, 3, 6};
+        int col2[]  = {1, 4, 7};
+        int col3[]  = {2, 5, 8};
+        
+        int diag1[] = {0, 4, 8};
+        int diag2[] = {2, 4, 6};
+        
+        int[] wins[] = {row1, row2, row3, col1, col2, col3, diag1, diag2};
+        
+        for (int[] win : wins)
+        {
+        	int score = 3;
+            int totEmptyTiles = 0;
+            
+            for (int tile : win)
+            {
+            	if(board.getTile(tile).getTileSymbol() == s)
+            		score--;
+            	else if(board.getTile(tile).getTileSymbol() == getSymbol())
+            		score++;
+            	
+            	if(board.getTile(tile).getTileSymbol() == Symbol.EMPTY)
+            	{
+            		totEmptyTiles++;
+            		
+            		if(totEmptyTiles == 1)
+            			theEmptyTile = tile;
+            	}
+            		
+            }
+            
+            if (totEmptyTiles == 1 && score == 1) 
+	            aboutToWin = true;
+        }
+        
+        
+        return aboutToWin;
+    }
+ 
     
-    /*           
+             
     public int chooseSpace(TicTacToe aGame)
     {
     	return minimax(aGame,0, new HashMap<>());
     }
+    
+    public boolean catsGame(TicTacToe game)
+    {
+    	
+    	return (game.getBoard().isFull()
+    		&& !game.getBoard().isWinner(Symbol.EX)
+    		&& !game.getBoard().isWinner(Symbol.OH));
+	}
    
 private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOutcomes)
     {
@@ -305,7 +411,10 @@ private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOu
     		}
  
     	}
-    } 
-*/
+    }
+    
+    
+}    
+
 
 
