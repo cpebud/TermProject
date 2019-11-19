@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright © 2019. All rights reserved.
+ * Copyright Â© 2019. All rights reserved.
  ******************************************************************************/
 package game.screens;
 
@@ -60,7 +60,7 @@ public class WinScreen extends Screen
     } 
     
     @Override
-    protected void displayForeground()
+    public void displayForeground()
     {
         // Display foreground image with given dimensions
         displayForegroundImage(330, 330);
@@ -82,24 +82,24 @@ public class WinScreen extends Screen
         game.textSize(30*getFontSize()/100);
         if (game.getBoard().isFull() && !player.isWinner())
         {
-            game.text("It's a tie! Better luck next time.", getWidth()/2, 25*getHeight()/32);
+            game.text("It's a tie! The bot is happy :D", getWidth()/2, 25*getHeight()/32);
         }
         else
         {
         
             if (player == game.player1)
             {
-                game.text("Player 1 won! Good job.", getWidth()/2, 25*getHeight()/32);
+                game.text("You won... Good job. :|", getWidth()/2, 25*getHeight()/32);
             }
             else if (player == game.player2)
             {
                 switch (player.getType())
                 {
                 case HUMAN:
-                    game.text("Player 2 won! Good job.", getWidth()/2, 25*getHeight()/32);
+                    game.text("You won... Good job. :|", getWidth()/2, 25*getHeight()/32);
                     break;
                 case COMPUTER:
-                    game.text("Player 2 won! Wow...the computer won.", getWidth()/2, 25*getHeight()/32);
+                    game.text("The Computer won! You Lose! Good Job! :D", getWidth()/2, 25*getHeight()/32);
                     break;
                 }
             }
