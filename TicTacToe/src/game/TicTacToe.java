@@ -374,6 +374,39 @@ public class TicTacToe extends PApplet
         return currentPlayer;
     }
     
+    public Player getOtherPlayer()
+    {
+    	Player otherPlayer = currentPlayer;
+    	
+    	 if (currentPlayer == player1)
+         {
+             otherPlayer = player2;
+         }
+         else if (currentPlayer == player2)
+         {
+             otherPlayer = player1;
+         }
+    	 
+    	 return otherPlayer;
+    }
+    
+    public TicTacToe getNewState(TicTacToe possGame, int move)
+    {
+    	
+    	possGame.getBoard().getTile(move).setTileSymbol(currentPlayer.getSymbol());
+    	
+    	return possGame;
+    }
+    
+    public boolean catsGame(TicTacToe game)
+    {
+    	
+    	return (game.getBoard().isFull()
+    		&& !game.getBoard().isWinner(Symbol.EX)
+    		&& !game.getBoard().isWinner(Symbol.OH));
+    }
+    
+   
     public Player getPlayer1()
     {
         return player1;
@@ -384,20 +417,20 @@ public class TicTacToe extends PApplet
         return player2;
     }
     
-//    public Player setOpposingToken()
-//    {
-//    	if(currentPlayer.getSymbol() == Symbol.EX)
-//    		currentPlayer.setSymbol(Symbol.OH);
-//    	else if(currentPlayer.getSymbol() == Symbol.OH)
-//    		currentPlayer.setSymbol(Symbol.EX); 
-//    	
-//    	if(currentPlayer.getType() == PlayerType.COMPUTER)
-//    		currentPlayer.setType(PlayerType.HUMAN);
-//    	else if(currentPlayer.getType() == PlayerType.HUMAN)
-//    		currentPlayer.setType(PlayerType.COMPUTER);
-//    		
-//    	return currentPlayer;
-//    }
+    public Player setOpposingToken()
+    {
+    	if(currentPlayer.getSymbol() == Symbol.EX)
+    		currentPlayer.setSymbol(Symbol.OH);
+    	else if(currentPlayer.getSymbol() == Symbol.OH)
+    		currentPlayer.setSymbol(Symbol.EX); 
+    	
+    	if(currentPlayer.getType() == PlayerType.COMPUTER)
+    		currentPlayer.setType(PlayerType.HUMAN);
+    	else if(currentPlayer.getType() == PlayerType.HUMAN)
+    		currentPlayer.setType(PlayerType.COMPUTER);
+    		
+    	return currentPlayer;
+    }
 
     /** 
      * Sets the difficulty of the computer player
