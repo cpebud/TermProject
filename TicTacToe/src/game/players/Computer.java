@@ -89,18 +89,22 @@ public class Computer extends Player
         		{
         			if(game.player1.getSymbol() == Symbol.EX)
          			{
-         				if(game.getBoard().getTile(4).isEmpty())
+        				
+    					if(game.getBoard().getTile(4).isEmpty())
          				{
          					game.getBoard().getTile(4).setTileSymbol(getSymbol());
          					firstMove = 4;
          				}     					
          				else
          					game.getBoard().getTile(0).setTileSymbol(getSymbol());
+        				
+         				
          			}
          			else
          			{
      					game.getBoard().getTile(4).setTileSymbol(getSymbol());
-     					firstMove = 4;
+     					firstMove = 4;         				
+     					
          			}
         		}
         		else
@@ -113,7 +117,10 @@ public class Computer extends Player
         			{
         				int blockFork = -1;
         			
-        				blockFork = stopFork();
+        				if(!checkDiagFork())		
+        					blockFork = stopFork();
+        				else
+        					blockFork = blockDiagFork();
         				        				
         				if(blockFork != -1)
         				{
@@ -142,6 +149,30 @@ public class Computer extends Player
        
     }
     
+    public boolean checkDiagFork()
+    {
+        return (game.getBoard().getTile(0).getTileSymbol() == game.player1.getSymbol() 
+        	&&  game.getBoard().getTile(8).getTileSymbol() == game.player1.getSymbol()) ||
+     		   (game.getBoard().getTile(2).getTileSymbol() == game.player1.getSymbol() 
+     	    &&  game.getBoard().getTile(6).getTileSymbol() == game.player1.getSymbol());
+    }
+    
+    public int blockDiagFork()
+    {
+    	int row2[] = {1,4,7};
+    	
+    	int blockDiagFork = -1;
+
+    		if(checkDiagFork())
+    		{
+    			for(int tile: row2)
+    				if(game.getBoard().getTile(tile).getTileSymbol() == Symbol.EMPTY)
+    					blockDiagFork = tile;
+    		}
+	
+    	return blockDiagFork;
+    }
+    
     public int stopFork()
     {
     	int row1[]  = {0, 3, 6};
@@ -150,7 +181,6 @@ public class Computer extends Player
         int col3[]  = {6, 7, 8};
         
         int stopFork = -1;
-
         int corners[] = {0,2,6,8};
         
        for(int i = 0; i<4;i++)
@@ -184,6 +214,10 @@ public class Computer extends Player
     	   }
     		   
        }
+       
+       
+    		   
+       
         
         return stopFork;
         	
