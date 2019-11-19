@@ -114,9 +114,7 @@ public class Computer extends Player
         				int blockFork = -1;
         			
         				blockFork = stopFork();
-        				
-        				System.out.println("blockFork: " + blockFork);
-        				
+        				        				
         				if(blockFork != -1)
         				{
          					game.getBoard().getTile(blockFork).setTileSymbol(getSymbol());
@@ -152,10 +150,6 @@ public class Computer extends Player
         int col3[]  = {6, 7, 8};
         
         int stopFork = -1;
-
-        
-        System.out.println("Human token: " + game.player1.getSymbol());
-        System.out.println("Computer token: " + game.player2.getSymbol());
 
         int corners[] = {0,2,6,8};
         
