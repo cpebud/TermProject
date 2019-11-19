@@ -214,11 +214,7 @@ public class Computer extends Player
     	   }
     		   
        }
-       
-       
-    		   
-       
-        
+   
         return stopFork;
         	
     }
@@ -236,40 +232,6 @@ public class Computer extends Player
        return score;
     }
     
-    public int findCommonTile(int[] numArray1, 
-    						  int[] numArray2)
-    {    	
-    	int forkTile = -1;
-    	for(int tile1 : numArray1)
-    	{
-    		for(int tile2 : numArray2)
-			{
-				if(tile1 == tile2)
-				{					
-	    			if(game.getBoard().getTile(tile1).getTileSymbol() == Symbol.EMPTY)
-	    			{
-						forkTile = tile1;
-						break;
-	    			}    			
-				}
-					
-			}
-    	}
-    	
-    	return forkTile;
-			
-				
-    }
-    
-    public static boolean isPresent(int[] a, int target)
-    {
-    	for (int i : a) {
-    		if (target == i) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }
     private void cantGetForkedTurn()
     {
     	game.switchTokens();
@@ -317,74 +279,7 @@ public class Computer extends Player
              game.getBoard().getTile(random).setTileSymbol(getSymbol());
          }
     }
-    
-   
-    
-    public boolean isGameOver(TicTacToe game)
-    {
-    	
-    	
-    	return(game.getBoard().isFull());
-    	
-    	
-    	
-    }
-    
-
-    	
-    public Boolean player1about2Win(TicTacToe game)
-    {
-    	//Boolean Variable
-        boolean aboutToWin = false;
-        Symbol s = game.player1.getSymbol();
-        int theEmptyTile = 0;
-        
-        GameBoard board = game.getBoard();
-        
-        int row1[]  = {0, 1, 2};
-        int row2[]  = {3, 4, 5};
-        int row3[]  = {6, 7, 8};
-         
-        int col1[]  = {0, 3, 6};
-        int col2[]  = {1, 4, 7};
-        int col3[]  = {2, 5, 8};
-        
-        int diag1[] = {0, 4, 8};
-        int diag2[] = {2, 4, 6};
-        
-        int[] wins[] = {row1, row2, row3, col1, col2, col3, diag1, diag2};
-        
-        for (int[] win : wins)
-        {
-        	int score = 3;
-            int totEmptyTiles = 0;
-            
-            for (int tile : win)
-            {
-            	if(board.getTile(tile).getTileSymbol() == s)
-            		score--;
-            	else if(board.getTile(tile).getTileSymbol() == getSymbol())
-            		score++;
-            	
-            	if(board.getTile(tile).getTileSymbol() == Symbol.EMPTY)
-            	{
-            		totEmptyTiles++;
-            		
-            		if(totEmptyTiles == 1)
-            			theEmptyTile = tile;
-            	}
-            		
-            }
-            
-            if (totEmptyTiles == 1 && score == 1) 
-	            aboutToWin = true;
-        }
-        
-        
-        return aboutToWin;
-    }
- 
-    
+      
              
     public int chooseSpace(TicTacToe aGame)
     {
@@ -399,7 +294,7 @@ public class Computer extends Player
     		&& !game.getBoard().isWinner(Symbol.OH));
 	}
    
-private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOutcomes)
+    private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOutcomes)
     {
     	if(catsGame(aGame))
     		//end recursion if the game is tied
