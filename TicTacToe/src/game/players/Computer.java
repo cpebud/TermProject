@@ -202,8 +202,8 @@ public class Computer extends Player
     		   score = scoreRow(col3, score);
     		   break;
     	   case 8:
+    		   score = scoreRow(row3, score);
     		   score = scoreRow(col3, score);
-    		   score = scoreRow(col1, score);
     		   break;
     	   }
     	   
