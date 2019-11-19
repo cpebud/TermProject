@@ -21,8 +21,8 @@ public class Human extends Player
      *      VARIABLES
      **************************************************************************/
     
-    private String name;
-    private boolean hasGone = false;
+    //private String name;
+    //private boolean hasGone = false;
 
     /***************************************************************************
      *      CONSTRUCTOR
@@ -38,10 +38,10 @@ public class Human extends Player
      *      SETTERS/GETTERS
      **************************************************************************/
     
-    public void setHasGone(Boolean hasGone)
-    {
-        this.hasGone = hasGone;
-    }
+//    public void setHasGone(Boolean hasGone)
+//    {
+//        this.hasGone = hasGone;
+//    }
     
     /***************************************************************************
      *      METHODS

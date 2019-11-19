@@ -89,6 +89,22 @@ public abstract class Player
         this.turn = 0;
     }
     
+    public Symbol opponentSymbol()
+    {
+        if (this.symbol != null)
+        {
+            if (this.symbol == Symbol.EX)
+            {
+                return Symbol.OH;
+            }
+            else if (this.symbol == Symbol.OH)
+            {
+                return Symbol.EX;
+            }
+        }
+        return null;
+    }
+    
     public Boolean isWinner()
     {
         //Boolean Variable
@@ -123,42 +139,6 @@ public abstract class Player
                 return winner;
             }
         }
-        /*//Check Row Winners
-        if ((board.getTile(0).getTileSymbol() == s) && (board.getTile(1).getTileSymbol() == s) && (board.getTile(2).getTileSymbol() == s))
-        {
-            winner = true;
-        }
-        else if ((board.getTile(3).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(5).getTileSymbol() == s))
-        {
-            winner = true;
-        }
-        else if ((board.getTile(6).getTileSymbol() == s) && (board.getTile(7).getTileSymbol() == s) && (board.getTile(8).getTileSymbol() == s))
-        {
-            winner = true;
-        }
-        //Check Column Winners
-        else if ((board.getTile(0).getTileSymbol() == s) && (board.getTile(3).getTileSymbol() == s) && (board.getTile(6).getTileSymbol() == s))
-        {
-            winner = true;
-        }
-        else if ((board.getTile(1).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(7).getTileSymbol() == s))
-        {
-            winner = true;
-        }
-        else if ((board.getTile(2).getTileSymbol() == s) && (board.getTile(5).getTileSymbol() == s) && (board.getTile(8).getTileSymbol() == s))
-        {
-            winner = true;
-        }
-        //Check Diagonal Winners
-        else if ((board.getTile(0).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(8).getTileSymbol() == s))
-        {
-            winner = true;
-        }
-        else if ((board.getTile(2).getTileSymbol() == s) && (board.getTile(4).getTileSymbol() == s) && (board.getTile(6).getTileSymbol() == s))
-        {
-            winner = true;
-        }*/
-        
         return winner;
     }
     
@@ -170,7 +150,19 @@ public abstract class Player
 
     public enum PlayerType
     {
-        HUMAN,
-        COMPUTER;
+        HUMAN("Human"),
+        COMPUTER("Computer");
+        
+        private String label;
+        
+        public String getLabel()
+        {
+            return this.label;
+        }
+        
+        private PlayerType(String label)
+        {
+            this.label = label;
+        }
     }
 }

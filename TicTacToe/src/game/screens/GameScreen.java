@@ -42,10 +42,11 @@ public class GameScreen extends Screen
         displayForegroundImage(330, 330);
         displayBoard();
         displayMessage();
+        displayHint();
         
         game.fill(getFontColor());
         game.textSize(30*getFontSize()/100);
-        game.text("hit 'P' to pause game", getWidth()/2, 13*getHeight()/16);
+        game.text("hit 'P' to pause game", getWidth()/2, 27*getHeight()/32);
     }
     
     private void displayBoard()
@@ -65,5 +66,14 @@ public class GameScreen extends Screen
         {
             game.text("Player 2's turn...", getWidth()/2, 4*getHeight()/16);
         }
+    }
+    
+    private void displayHint()
+    {
+        game.fill(getFontColor());
+        game.textSize(30*getFontSize()/100);
+        
+        String hint = game.getBoard().getHint();
+        game.text(hint, getWidth()/2, 25*getHeight()/32);
     }
 }

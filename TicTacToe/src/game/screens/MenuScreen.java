@@ -13,7 +13,6 @@ package game.screens;
 
 import game.Theme;
 import game.TicTacToe;
-import game.buttons.MenuOption;
 
 public class MenuScreen extends Screen
 {
@@ -105,15 +104,16 @@ public class MenuScreen extends Screen
         {
         case MAIN:
             setLabel(i++, "New Game");
+            setLabel(i++, "Versus");
             setLabel(i++, "Difficulty");
-            //setLabel(i++, "Settings");
+            setLabel(i++, "Settings");
             setLabel(i++, "Quit");            
             break;
             
         case PAUSE:
             setLabel(i++, "Continue Game");
             setLabel(i++, "New Game");
-            //setLabel(i++, "Settings");
+            setLabel(i++, "Settings");
             setLabel(i++, "Main Menu");
             setLabel(i++, "Quit");
             break;
@@ -126,7 +126,7 @@ public class MenuScreen extends Screen
             
         case DIFFICULTY:
             setLabel(i++, "Easy");
-            setLabel(i++, "Medium");
+            //setLabel(i++, "Medium");
             setLabel(i++, "Hard");
             setLabel(i++, "Back");
             break;
@@ -145,6 +145,12 @@ public class MenuScreen extends Screen
             setLabel(i++,"Back");
             break;
             
+        case SOUNDS:
+            setLabel(i++, "On");
+            setLabel(i++, "Off");
+            setLabel(i++, "Back");
+            break;   
+            
         default:
             break;
         }
@@ -161,7 +167,8 @@ public class MenuScreen extends Screen
         VERSUS("Versus"),
         DIFFICULTY("Difficulty"),
         SETTINGS("Settings"),
-        THEMES("Themes");
+        THEMES("Themes"),
+        SOUNDS("Sounds");
         
         private String title;
         

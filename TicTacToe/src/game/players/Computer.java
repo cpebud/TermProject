@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright Â© 2019. All rights reserved.
+ * Copyright � 2019. All rights reserved.
  ******************************************************************************/
 package game.players;
 
@@ -29,8 +29,8 @@ public class Computer extends Player
      **************************************************************************/
     
     private Difficulty difficulty;
-    private ArrayList<Integer> scores = new ArrayList<Integer>();
-    private ArrayList<Integer> possMoves = new ArrayList<Integer>();
+    //private ArrayList<Integer> scores = new ArrayList<Integer>();
+    //private ArrayList<Integer> possMoves = new ArrayList<Integer>();
     int theDepth = 0;
 
 
@@ -71,7 +71,7 @@ public class Computer extends Player
     @Override
     public void takeTurn()
     {
-        game.delay(1500);
+        //game.delay(1500);
         switch(difficulty)
         {
         case EASY:
@@ -99,7 +99,7 @@ public class Computer extends Player
         		//plays defense
         		if(!game.player2.isWinner())
         		{
-        			game.getBoard().resetSpace(bestMoveWin);
+        			game.getBoard().resetTile(bestMoveWin);
         			
         			game.getBoard().getTile(bestMoveBlock).setTileSymbol(getSymbol());
         		}
@@ -190,7 +190,7 @@ public class Computer extends Player
     				//switch tokens so computer can calculate hypothetical opponent move
     				aGame.nextPlayer();
         			potentialOutcomes.put(space, (-1 * minimax(aGame, depth + 1, new HashMap<>())));
-        			aGame.getBoard().resetSpace(space);  
+        			aGame.getBoard().resetTile(space);  
         			aGame.nextPlayer();
         		}    			
     		}

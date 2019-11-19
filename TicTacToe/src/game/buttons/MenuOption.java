@@ -14,6 +14,8 @@ package game.buttons;
 import game.Theme;
 import game.TicTacToe;
 import game.TicTacToe.Difficulty;
+import game.players.Computer;
+import game.players.Player.PlayerType;
 import game.screens.MenuScreen.Menu;
 import game.screens.Screen.ScreenType;
 import processing.core.PConstants;
@@ -46,7 +48,7 @@ public class MenuOption extends Button
         this.fontSize      = game.getTheme().getFontSize();
         this.fontColor     = game.getTheme().getFontColor();
         this.fontHover     = game.getTheme().getFontHover();
-        this.fontHighlight = game.getTheme().getfontHighlight();
+        this.fontHighlight = game.getTheme().getFontHighlight();
     }
     
     /***************************************************************************
@@ -96,7 +98,9 @@ public class MenuOption extends Button
         }
         else
         {
-            if (game.getDifficulty().getLabel() == label || game.getTheme().getLabel() == label)
+            if (game.getDifficulty().getLabel() == label || 
+                game.getTheme().getLabel() == label ||
+                game.getPlayer2().getType().getLabel() == label)
             {
                 game.fill(fontHighlight);
             }
@@ -118,7 +122,7 @@ public class MenuOption extends Button
         this.fontSize      = game.getTheme().getFontSize();
         this.fontColor     = game.getTheme().getFontColor();
         this.fontHover     = game.getTheme().getFontHover();
-        this.fontHighlight = game.getTheme().getfontHighlight();
+        this.fontHighlight = game.getTheme().getFontHighlight();
     }
     
     public void getFunction(String label)
@@ -128,8 +132,8 @@ public class MenuOption extends Button
         case "New Game":
             game.changeScreen(ScreenType.GAME, Menu.PAUSE);
             game.getBoard().clear();
-            game.player1.resetTurn();
-            game.player2.resetTurn();
+            game.getPlayer1().resetTurn();
+            game.getPlayer2().resetTurn();
             game.assignPlayerSymbol();
             break;
         case "Continue Game":
@@ -137,6 +141,16 @@ public class MenuOption extends Button
             break;
         case "Main Menu":
             game.goMainMenu();
+            break;
+        case "Versus":
+            game.changeScreen(ScreenType.MENU, Menu.VERSUS);
+            break;
+        case "Computer":
+            game.switchPlayer2(PlayerType.COMPUTER);
+            ((Computer)game.getPlayer2()).updateDifficulty();
+            break;
+        case "Human":
+            game.switchPlayer2(PlayerType.HUMAN);
             break;
         case "Difficulty":
             game.changeScreen(ScreenType.MENU, Menu.DIFFICULTY);
@@ -161,6 +175,21 @@ public class MenuOption extends Button
             break;
         case "retro":
             game.updateCurrentTheme(Theme.RETRO);
+            break;
+        case "Sounds":
+            game.changeScreen(ScreenType.MENU, Menu.SOUNDS);
+            break;
+        case "On":
+            if (game.getCurrentMenu() == Menu.SOUNDS)
+            {
+                game.setSoundsOn(true);
+            }
+            break;
+        case "Off":
+            if (game.getCurrentMenu() == Menu.SOUNDS)
+            {
+                game.setSoundsOn(false);
+            }
             break;
         case "Back":
             game.goBackScreen();

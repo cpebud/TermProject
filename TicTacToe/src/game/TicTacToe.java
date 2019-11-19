@@ -24,17 +24,12 @@ import game.players.Computer;
 import game.players.Human;
 import game.players.Player;
 import game.players.Player.PlayerType;
-import game.screens.DifficultyMenu;
 import game.screens.GameScreen;
 import game.screens.InitScreen;
-import game.screens.MainMenu;
 import game.screens.MenuScreen;
 import game.screens.MenuScreen.Menu;
-import game.screens.PauseMenu;
 import game.screens.Screen;
 import game.screens.Screen.ScreenType;
-import game.screens.SettingsMenu;
-import game.screens.ThemesMenu;
 import game.screens.WinScreen;
 import processing.core.PApplet;
 import util.Reference;
@@ -146,6 +141,9 @@ public class TicTacToe extends PApplet
             case PAUSE:
                 screens.get("Pause").display();
                 break;
+            case VERSUS:
+                screens.get("Versus").display();
+                break;
             case DIFFICULTY:
                 screens.get("Difficulty").display();
                 break;
@@ -155,6 +153,8 @@ public class TicTacToe extends PApplet
             case THEMES:
                 screens.get("Themes").display();
                 break;
+            case SOUNDS:
+                screens.get("Sounds").display();
             default:
                 break;
             }
@@ -208,12 +208,12 @@ public class TicTacToe extends PApplet
                         if (getSoundsOn()) { click.trigger(); }
                         tile.setTileSymbol(currentPlayer.getSymbol());
                         currentPlayer.takeTurn();
+                        board.printLineScores();
                     }
                 }
             }
             break;
         case WIN:
-           
             goMainMenu();
             break;
         default:
@@ -224,7 +224,6 @@ public class TicTacToe extends PApplet
     /** Mouse move event */
     public void mouseMoved()
     {
-        redraw();
         switch (currentScreen)
         {
         case MENU:
@@ -235,16 +234,30 @@ public class TicTacToe extends PApplet
             break;
             
         case GAME:
+            boolean isInside = false;
             for (int i = 0; i < GameBoard.NUM_TILES; i++)
             {
                 GameTile tile = board.getTile(i);
-
-                tile.setHover(tile.isInside(mouseX, mouseY));
+                if (tile.isInside(mouseX, mouseY) && tile.isEmpty())
+                {
+                    isInside = true;
+                    tile.setHover(true);
+                    board.updateHint(i);
+                }
+                else
+                {
+                    tile.setHover(false);
+                }
+                if (!isInside)
+                {
+                    board.updateHint(-1);
+                }
             }
 
             if (getCurrentPlayer().getType() == PlayerType.COMPUTER)
             {
                 getCurrentPlayer().takeTurn();
+                board.printLineScores();
             }
             break;
             
@@ -282,12 +295,14 @@ public class TicTacToe extends PApplet
     private void loadScreens()
     {
         screens.put("Initial", new InitScreen(this));
-        screens.put("Main", new MainMenu(this));
+        screens.put("Main", new MenuScreen(this, Menu.MAIN));
         screens.put("Game", new GameScreen(this));
-        screens.put("Pause", new PauseMenu(this));
-        screens.put("Difficulty", new DifficultyMenu(this));
-        screens.put("Settings", new SettingsMenu(this));
-        screens.put("Themes", new ThemesMenu(this));
+        screens.put("Pause", new MenuScreen(this, Menu.PAUSE));
+        screens.put("Versus", new MenuScreen(this, Menu.VERSUS));
+        screens.put("Difficulty", new MenuScreen(this, Menu.DIFFICULTY));
+        screens.put("Settings", new MenuScreen(this, Menu.SETTINGS));
+        screens.put("Themes", new MenuScreen(this, Menu.THEMES));
+        screens.put("Sounds", new MenuScreen(this, Menu.SOUNDS));
         screens.put("Win", new WinScreen(this));
     }
     
@@ -361,20 +376,30 @@ public class TicTacToe extends PApplet
         return currentPlayer;
     }
     
-    public Player setOpposingToken()
+    public Player getPlayer1()
     {
-    	if(currentPlayer.getSymbol() == Symbol.EX)
-    		currentPlayer.setSymbol(Symbol.OH);
-    	else if(currentPlayer.getSymbol() == Symbol.OH)
-    		currentPlayer.setSymbol(Symbol.EX); 
-    	
-    	if(currentPlayer.getType() == PlayerType.COMPUTER)
-    		currentPlayer.setType(PlayerType.HUMAN);
-    	else if(currentPlayer.getType() == PlayerType.HUMAN)
-    		currentPlayer.setType(PlayerType.COMPUTER);
-    		
-    	return currentPlayer;
+        return player1;
     }
+    
+    public Player getPlayer2()
+    {
+        return player2;
+    }
+    
+//    public Player setOpposingToken()
+//    {
+//    	if(currentPlayer.getSymbol() == Symbol.EX)
+//    		currentPlayer.setSymbol(Symbol.OH);
+//    	else if(currentPlayer.getSymbol() == Symbol.OH)
+//    		currentPlayer.setSymbol(Symbol.EX); 
+//    	
+//    	if(currentPlayer.getType() == PlayerType.COMPUTER)
+//    		currentPlayer.setType(PlayerType.HUMAN);
+//    	else if(currentPlayer.getType() == PlayerType.HUMAN)
+//    		currentPlayer.setType(PlayerType.COMPUTER);
+//    		
+//    	return currentPlayer;
+//    }
 
     /** 
      * Sets the difficulty of the computer player
@@ -410,7 +435,7 @@ public class TicTacToe extends PApplet
         return board;
     }
     
-    private void setSoundsOn(Boolean soundsOn)
+    public void setSoundsOn(Boolean soundsOn)
     {
         this.soundsOn = soundsOn;
     }
@@ -506,6 +531,15 @@ public class TicTacToe extends PApplet
         }
     }
     
+    public void switchPlayer2(PlayerType pType)
+    {
+        if (player2.getType() != pType)
+        {
+            Player temp = player2;
+            player2 = playerAlt;
+            playerAlt = temp;
+        }
+    }
     
     public void updateDifficulty(Difficulty difficulty)
     {
