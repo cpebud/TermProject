@@ -74,7 +74,7 @@ public abstract class Screen
         this.fontSize      = game.getTheme().getFontSize();
         this.fontColor     = game.getTheme().getFontColor();
         this.fontHover     = game.getTheme().getFontHover();
-        this.fontHighlight = game.getTheme().getfontHighlight();
+        this.fontHighlight = game.getTheme().getFontHighlight();
         
         this.background    = game.getTheme().getBackground();
     }
@@ -162,7 +162,7 @@ public abstract class Screen
         this.fontSize      = game.getTheme().getFontSize();
         this.fontColor     = game.getTheme().getFontColor();
         this.fontHover     = game.getTheme().getFontHover();
-        this.fontHighlight = game.getTheme().getfontHighlight();
+        this.fontHighlight = game.getTheme().getFontHighlight();
 
         this.background = game.getTheme().getBackground();
     }

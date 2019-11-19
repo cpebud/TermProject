@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright Â© 2019. All rights reserved.
+ * Copyright � 2019. All rights reserved.
  ******************************************************************************/
 package game.players;
 
@@ -29,7 +29,7 @@ public class Computer extends Player
      **************************************************************************/
     
     private Difficulty difficulty;
-   
+
     int theDepth = 0;
     int nextMove = 0;
     int firstMove = 0;
@@ -73,7 +73,7 @@ public class Computer extends Player
     @Override
     public void takeTurn()
     {
-        game.delay(1500);
+        //game.delay(1500);
         switch(difficulty)
         {
         case EASY:
@@ -385,7 +385,7 @@ private int minimax(TicTacToe aGame, int depth, Map<Integer,Integer> potentialOu
     				//switch tokens so computer can calculate hypothetical opponent move
     				aGame.nextPlayer();
         			potentialOutcomes.put(space, (-1 * minimax(aGame, depth + 1, new HashMap<>())));
-        			aGame.getBoard().resetSpace(space);  
+        			aGame.getBoard().resetTile(space);  
         			aGame.nextPlayer();
         		}    			
     		}

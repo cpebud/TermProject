@@ -116,7 +116,7 @@ public enum Theme
         return fontHover;
     }
     
-    public int getfontHighlight()
+    public int getFontHighlight()
     {
         return fontHighlight;
     }
