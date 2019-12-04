@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright © 2019. All rights reserved.
+ * Copyright Â© 2019. All rights reserved.
  ******************************************************************************/
 package game.players;
 
@@ -19,14 +19,6 @@ import game.screens.Screen.ScreenType;
 public class Human extends Player
 {
     /***************************************************************************
-     *      VARIABLES
-     **************************************************************************/
-    
-    //private String name;
-    //private boolean hasGone = false;
-	
-
-    /***************************************************************************
      *      CONSTRUCTOR
      **************************************************************************/
     
@@ -35,16 +27,7 @@ public class Human extends Player
         super(game);
         setType(PlayerType.HUMAN);
     }
-    
-    /***************************************************************************
-     *      SETTERS/GETTERS
-     **************************************************************************/
-    
-//    public void setHasGone(Boolean hasGone)
-//    {
-//        this.hasGone = hasGone;
-//    }
-    
+  
     /***************************************************************************
      *      METHODS
      **************************************************************************/
@@ -65,7 +48,5 @@ public class Human extends Player
                 game.win.trigger(); 
             }
         }
-    }
-    
-    
+    }   
 }
