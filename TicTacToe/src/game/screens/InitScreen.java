@@ -35,8 +35,6 @@ public class InitScreen extends Screen
      * Extends <tt>Screen</tt>.
      * 
      * @param game     : Parent applet
-     * @param foreground : Foreground image for screen
-     * @param background : Background image for screen
      * 
      * @see Screen
      * @see InitScreen

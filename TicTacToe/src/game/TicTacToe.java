@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright Â© 2019. All rights reserved.
+ * Copyright � 2019. All rights reserved.
  ******************************************************************************/
 package game;
 
@@ -34,14 +34,13 @@ import game.screens.WinScreen;
 import processing.core.PApplet;
 import util.Reference;
 
-
 /**
  * <tt>TicTacToe</tt> is  a game created using Processing 
  *      in combination with Eclipse.
  * 
  * @author  Garrett Cross, Omar Kermiche, Autumn Nguyen, Thomas Pridy
  * 
- * @version 0.3.0
+ * @version 1.3.0
  * @since   10/04/2019
  *
  */
@@ -57,7 +56,7 @@ public class TicTacToe extends PApplet
      **************************************************************************/
     
     /*   Current Theme   */
-    private Theme currentTheme = Theme.CHALK;
+    private Theme currentTheme = Theme.RETRO;
 
     /*   Current Screens   */
     private Stack<ScreenType> currentScreens = new Stack<>();
@@ -198,7 +197,7 @@ public class TicTacToe extends PApplet
             break;
             
         case GAME:
-            if (currentPlayer.getType() == PlayerType.HUMAN)
+            if (getCurrentPlayer().getType() == PlayerType.HUMAN)
             {
                 for (int i = 0; i < GameBoard.NUM_TILES; i++)
                 {
@@ -207,7 +206,7 @@ public class TicTacToe extends PApplet
                     {
                         if (getSoundsOn()) { click.trigger(); }
                         tile.setTileSymbol(currentPlayer.getSymbol());
-                        currentPlayer.takeTurn();
+                        getCurrentPlayer().takeTurn();
                     }
                 }
             }
@@ -252,7 +251,6 @@ public class TicTacToe extends PApplet
                     board.updateHint(-1);
                 }
             }
-
             if (getCurrentPlayer().getType() == PlayerType.COMPUTER)
             {
                 getCurrentPlayer().takeTurn();
@@ -590,9 +588,7 @@ public class TicTacToe extends PApplet
             tile.update();
         }
     }
-    
-
-    
+      
     /***************************************************************************
      *      ENUMERATORS
      **************************************************************************/
@@ -601,7 +597,8 @@ public class TicTacToe extends PApplet
     {
         EASY("Easy"),
         MEDIUM("Medium"),
-        HARD("Hard");
+        HARD("Hard"),
+        IMPOSSIBLE("Impossible");
         
         private String label;
         
