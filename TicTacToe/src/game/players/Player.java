@@ -13,7 +13,9 @@ package game.players;
 
 import game.GameBoard;
 import game.TicTacToe;
+import game.buttons.GameTile;
 import game.buttons.GameTile.Symbol;
+
 
 public abstract class Player
 {
@@ -27,6 +29,8 @@ public abstract class Player
     
     private Symbol symbol;
     private int turn;
+    
+    private float[] times = new float[6];
     
 
     /***************************************************************************
@@ -42,7 +46,7 @@ public abstract class Player
      *      SETTERS/GETTERS
      **************************************************************************/
     
-    protected void setType(PlayerType type)
+    public void setType(PlayerType type)
     {
         this.pType = type;
     }
@@ -65,6 +69,11 @@ public abstract class Player
     public int getTurn()
     {
         return turn;
+    }
+    
+    public float[] getTime()
+    {
+    	return times;
     }
     
     /***************************************************************************
@@ -144,6 +153,44 @@ public abstract class Player
     
     public abstract void takeTurn();
     
+    public void addTime(float time)
+    {
+    	times[this.getTurn()] = time;
+    }
+    
+    public float average()
+    {
+    	float sum = 0;
+        for (int i = 0; i < times.length; i++) 
+        {
+        	if (times[i] == 0.0) break;
+            sum += times[i];
+            game.println("Index:");
+            game.println(Integer.toString(i));
+            game.println("Value:");
+            game.println(Float.toString(times[i]));
+        }
+        game.println("Turns:");
+        game.println(Float.toString(game.getPlayer1().getTurn()));
+        return sum/game.getPlayer1().getTurn();
+    }
+    
+    public void randomTurn()
+    {
+    	int random = (int)(Math.random() * 9);
+    	GameTile tile = game.getBoard().getTile(random);
+    	if (tile.isEmpty())
+    	{
+    		if (game.getSoundsOn()) { game.click.trigger(); }
+            tile.setTileSymbol(game.getCurrentPlayer().getSymbol());
+    	}
+    	else
+    	{
+    		randomTurn();
+    	}
+    	
+    }
+    
     /***************************************************************************
      *      ENUMERATOR
      **************************************************************************/
@@ -165,4 +212,6 @@ public abstract class Player
             this.label = label;
         }
     }
+
+	
 }

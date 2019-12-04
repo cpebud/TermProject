@@ -38,7 +38,7 @@ import processing.core.PImage;
 public enum Theme
 {
     RETRO("retro", 45, 0xff64f00e, 0xffec1c24, 0xffffffff),  // green, red, white
-    //DEFAULT("default", 0xff000000, 0xff6464, 0xffd63c3c),
+    CHRISTMAS("christmas",100, 0xffffffff, 0xff6464, 0xffd63c3c),
     CHALK("chalk", 100, 0xffefefef, 0Xff646464, 0xffd63c3c); // light grey, dark grey, red
     
     

@@ -7,13 +7,14 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright © 2019. All rights reserved.
+ * Copyright Â© 2019. All rights reserved.
  ******************************************************************************/
 package game.players;
 
 import game.TicTacToe;
 import game.screens.MenuScreen.Menu;
 import game.screens.Screen.ScreenType;
+
 
 public class Human extends Player
 {
@@ -47,5 +48,5 @@ public class Human extends Player
                 game.win.trigger(); 
             }
         }
-    }
+    }   
 }

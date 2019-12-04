@@ -130,7 +130,7 @@ public class MenuOption extends Button
         switch(label)
         {
         case "New Game":
-            game.changeScreen(ScreenType.GAME, Menu.PAUSE);
+            game.changeScreen(ScreenType.TIME, Menu.MAIN);
             game.getBoard().clear();
             game.getPlayer1().resetTurn();
             game.getPlayer2().resetTurn();
@@ -175,6 +175,9 @@ public class MenuOption extends Button
             break;
         case "chalk":
             game.updateCurrentTheme(Theme.CHALK);
+            break;
+        case "christmas":
+            game.updateCurrentTheme(Theme.CHRISTMAS);
             break;
         case "retro":
             game.updateCurrentTheme(Theme.RETRO);
