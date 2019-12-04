@@ -99,7 +99,7 @@ public class WinScreen extends Screen
                     game.text("You won... Good job... :I", getWidth()/2, 25*getHeight()/32);
                     break;
                 case COMPUTER:
-                    game.text("The Computer won! You're the loser! Good Job! :D", getWidth()/2, 25*getHeight()/32);
+                    game.text("The Computer won! You're the loser!", getWidth()/2, 25*getHeight()/32);
                     break;
                 }
             }

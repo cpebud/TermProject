@@ -126,8 +126,9 @@ public class MenuScreen extends Screen
             
         case DIFFICULTY:
             setLabel(i++, "Easy");
-            //setLabel(i++, "Medium");
+            setLabel(i++, "Medium");
             setLabel(i++, "Hard");
+            setLabel(i++, "Impossible");
             setLabel(i++, "Back");
             break;
             
