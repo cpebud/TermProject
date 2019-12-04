@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import controlP5.ControlP5;
+import controlP5.Slider;
 import ddf.minim.AudioSample;
 import ddf.minim.Minim;
 import game.buttons.GameTile;
@@ -30,13 +32,14 @@ import game.screens.MenuScreen;
 import game.screens.MenuScreen.Menu;
 import game.screens.Screen;
 import game.screens.Screen.ScreenType;
+import game.screens.TimeScreen;
 import game.screens.WinScreen;
 import processing.core.PApplet;
 import util.Reference;
 
-
 /**
- * <tt>TicTacToe</tt> is  a game created using Processing 
+ * <tt>TicTacToe</tt> is  a game created using 
+ * Processing 
  *      in combination with Eclipse.
  * 
  * @author  Garrett Cross, Omar Kermiche, Autumn Nguyen, Thomas Pridy
@@ -85,6 +88,12 @@ public class TicTacToe extends PApplet
     
     private MenuOption[] options = new MenuOption[MenuScreen.NUM_BUTTONS];
     
+    
+	private Slider slider;
+	private float sliderValue = 3;
+	private float startofTurnTime;
+	private float endofTurnTime;
+    
     private GameBoard board;
     
     /***************************************************************************
@@ -104,9 +113,11 @@ public class TicTacToe extends PApplet
     /** Initial setup */
     public void setup()
     {
+    	
         loadThemes();
         loadScreens();
         loadButtons();
+        loadSlider();
         
         click = getTheme().getMenuClick();
         win = getTheme().getGameWin();
@@ -161,10 +172,14 @@ public class TicTacToe extends PApplet
             break;
         case GAME:
             screens.get("Game").display();
+            checkTime();
             break;
         case WIN:
             screens.get("Win").display();
             break;
+        case TIME:
+        	screens.get("Time").display();
+        	break;
         default:
             screens.get("Initial").display();
             break;
@@ -207,6 +222,25 @@ public class TicTacToe extends PApplet
                     {
                         if (getSoundsOn()) { click.trigger(); }
                         tile.setTileSymbol(currentPlayer.getSymbol());
+                        endofTurnTime = second();
+                        println("End of Turn Time:");
+                    	println(endofTurnTime);
+                    	
+                        if (startofTurnTime < endofTurnTime)
+                        {
+                        	getCurrentPlayer().addTime(endofTurnTime - startofTurnTime);
+                        	println(endofTurnTime - startofTurnTime);
+                        }
+                        else if (startofTurnTime > endofTurnTime) 
+                        {
+                        	getCurrentPlayer().addTime(60 - (endofTurnTime - startofTurnTime));
+                        	println(60 - (endofTurnTime - startofTurnTime));
+                        }
+                        else
+                        {
+                        	getCurrentPlayer().addTime((float)0.5);
+                        	println(1);
+                        }
                         currentPlayer.takeTurn();
                     }
                 }
@@ -256,9 +290,13 @@ public class TicTacToe extends PApplet
             if (getCurrentPlayer().getType() == PlayerType.COMPUTER)
             {
                 getCurrentPlayer().takeTurn();
+                startofTurnTime = second();
+                println("Start of Turn Time:");
+            	println(startofTurnTime);
             }
             break;
-            
+        case WIN:
+        	getPlayer1().average();
         default:
             break;
         }   
@@ -266,14 +304,31 @@ public class TicTacToe extends PApplet
     
     /** Key press event */
     public void keyPressed()
-    {          
-        if (currentScreen == ScreenType.GAME)
-        {
-            if (keyCode == 80)  // P
-            {
-                changeScreen(ScreenType.MENU, Menu.PAUSE);
-            }
-        }
+    {   
+    	switch(currentScreen)
+    	{
+    	case GAME:
+    		if (keyCode == 80)
+    		{
+    			changeScreen(ScreenType.MENU, Menu.MAIN);
+    		}
+    		break;
+    	case TIME:
+    		if (keyCode == ENTER)
+    		{
+    			getSlider().hide();
+    			sliderValue = getSlider().getValue();
+    			changeScreen(ScreenType.GAME, Menu.MAIN);
+    			println(Float.toString(sliderValue));
+    			startofTurnTime = second();
+    			println("Start of Turn Time:");
+            	println(startofTurnTime);
+    		}
+    		break;
+		default:
+			break;
+    	}
+   
     }
     
     /***************************************************************************
@@ -302,6 +357,7 @@ public class TicTacToe extends PApplet
         screens.put("Themes", new MenuScreen(this, Menu.THEMES));
         screens.put("Sounds", new MenuScreen(this, Menu.SOUNDS));
         screens.put("Win", new WinScreen(this));
+        screens.put("Time", new TimeScreen(this));
     }
     
     /** Load buttons */
@@ -313,6 +369,18 @@ public class TicTacToe extends PApplet
         }
     }
     
+    private void loadSlider()
+    {
+    	ControlP5 cp5 = new ControlP5(this);
+    	slider = cp5.addSlider("Time")
+    	        .setValue(3)
+    	        .setPosition(1*Reference.WIDTH/3 - 20, 2*Reference.HEIGHT/5)
+    	        .setRange(3,60)
+    	        .setSliderMode(Slider.FLEXIBLE)
+    	        .setSize(250, 30)
+    	        ;
+    	slider.hide();
+    }
     /***************************************************************************
      *      SETTERS/GETTERS
      **************************************************************************/
@@ -459,6 +527,21 @@ public class TicTacToe extends PApplet
     {
         return soundsOn;
     }
+    
+    public Slider getSlider()
+    {
+    	return slider;
+    }
+    
+    public float getStartofTurnTime()
+    {
+    	return startofTurnTime;
+    }
+    
+    public float getEndofTurnTime()
+    {
+    	return endofTurnTime;
+    }
 
     /***************************************************************************
      *      OTHER FUNCTIONS
@@ -588,6 +671,37 @@ public class TicTacToe extends PApplet
         for (GameTile tile : board.getTiles())
         {
             tile.update();
+        }
+    }
+    
+    private void checkTime()
+    {
+    	endofTurnTime = second();
+    	
+        if (currentPlayer.getType() == PlayerType.HUMAN)
+        {
+	        if (startofTurnTime < endofTurnTime)
+	        {
+	        	if ((endofTurnTime - startofTurnTime) >= sliderValue - 1)
+	        	{
+	        		getCurrentPlayer().addTime(endofTurnTime - startofTurnTime);
+	        		getCurrentPlayer().randomTurn();
+	        		getCurrentPlayer().takeTurn();
+	        	}
+	        }
+	        else if (startofTurnTime > endofTurnTime)
+	        {
+	        	if ((60 - (startofTurnTime - endofTurnTime)) >= sliderValue)
+	        	{
+	        		getCurrentPlayer().addTime(60 - (endofTurnTime - startofTurnTime));
+	        		getCurrentPlayer().randomTurn();
+	        		getCurrentPlayer().takeTurn();
+	        	}
+	        }
+	        else if (startofTurnTime == endofTurnTime)
+	        {
+	        	
+	        }
         }
     }
     

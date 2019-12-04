@@ -247,8 +247,7 @@ public class Computer extends Player
 		//plays defense
 		if(!game.player2.isWinner())
 		{
-			game.getBoard().resetTile(bestMoveWin);
-			
+			game.getBoard().resetTile(bestMoveWin);			
 			game.getBoard().getTile(bestMoveBlock).setTileSymbol(getSymbol());
 		}
     }
