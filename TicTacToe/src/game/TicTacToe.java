@@ -223,23 +223,23 @@ public class TicTacToe extends PApplet
                         if (getSoundsOn()) { click.trigger(); }
                         tile.setTileSymbol(currentPlayer.getSymbol());
                         endofTurnTime = second();
-                        println("End of Turn Time:");
-                    	println(endofTurnTime);
+                        //println("End of Turn Time:");
+                    	//println(endofTurnTime);
                     	
                         if (startofTurnTime < endofTurnTime)
                         {
                         	getCurrentPlayer().addTime(endofTurnTime - startofTurnTime);
-                        	println(endofTurnTime - startofTurnTime);
+                        	//println(endofTurnTime - startofTurnTime);
                         }
                         else if (startofTurnTime > endofTurnTime) 
                         {
                         	getCurrentPlayer().addTime(60 - (endofTurnTime - startofTurnTime));
-                        	println(60 - (endofTurnTime - startofTurnTime));
+                        	//println(60 - (startofTurnTime - endofTurnTime));
                         }
                         else
                         {
                         	getCurrentPlayer().addTime((float)0.5);
-                        	println(1);
+                        	//println(0.5);
                         }
                         currentPlayer.takeTurn();
                     }
@@ -291,8 +291,8 @@ public class TicTacToe extends PApplet
             {
                 getCurrentPlayer().takeTurn();
                 startofTurnTime = second();
-                println("Start of Turn Time:");
-            	println(startofTurnTime);
+                //println("Start of Turn Time:");
+            	//println(startofTurnTime);
             }
             break;
         case WIN:
@@ -319,10 +319,10 @@ public class TicTacToe extends PApplet
     			getSlider().hide();
     			sliderValue = getSlider().getValue();
     			changeScreen(ScreenType.GAME, Menu.MAIN);
-    			println(Float.toString(sliderValue));
+    			//println(Float.toString(sliderValue));
     			startofTurnTime = second();
-    			println("Start of Turn Time:");
-            	println(startofTurnTime);
+    			//println("Start of Turn Time:");
+            	//println(startofTurnTime);
     		}
     		break;
 		default:
@@ -685,23 +685,22 @@ public class TicTacToe extends PApplet
 	        	if ((endofTurnTime - startofTurnTime) >= sliderValue - 1)
 	        	{
 	        		getCurrentPlayer().addTime(endofTurnTime - startofTurnTime);
+	        		//println(Float.toString(endofTurnTime - startofTurnTime));
 	        		getCurrentPlayer().randomTurn();
 	        		getCurrentPlayer().takeTurn();
 	        	}
 	        }
 	        else if (startofTurnTime > endofTurnTime)
 	        {
-	        	if ((60 - (startofTurnTime - endofTurnTime)) >= sliderValue)
+	        	if ((60 - (startofTurnTime - endofTurnTime)) >= sliderValue - 1)
 	        	{
-	        		getCurrentPlayer().addTime(60 - (endofTurnTime - startofTurnTime));
+	        		getCurrentPlayer().addTime(60 - (startofTurnTime - endofTurnTime));
+	        		//println(Float.toString(60 - (endofTurnTime - startofTurnTime)));
 	        		getCurrentPlayer().randomTurn();
 	        		getCurrentPlayer().takeTurn();
 	        	}
 	        }
-	        else if (startofTurnTime == endofTurnTime)
-	        {
-	        	
-	        }
+	        
         }
     }
     

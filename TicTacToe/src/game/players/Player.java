@@ -165,13 +165,13 @@ public abstract class Player
         {
         	if (times[i] == 0.0) break;
             sum += times[i];
-            game.println("Index:");
-            game.println(Integer.toString(i));
-            game.println("Value:");
-            game.println(Float.toString(times[i]));
+            //game.println("Index:");
+            //game.println(Integer.toString(i));
+            //game.println("Value:");
+            //game.println(Float.toString(times[i]));
         }
-        game.println("Turns:");
-        game.println(Float.toString(game.getPlayer1().getTurn()));
+        //game.println("Turns:");
+        //game.println(Float.toString(game.getPlayer1().getTurn()));
         return sum/game.getPlayer1().getTurn();
     }
     
