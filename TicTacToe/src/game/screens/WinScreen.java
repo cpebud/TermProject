@@ -82,28 +82,31 @@ public class WinScreen extends Screen
         game.textSize(30*getFontSize()/100);
         if (game.getBoard().isFull() && !player.isWinner())
         {
-            game.text("It's a tie! Better luck next time.", getWidth()/2, 25*getHeight()/32);
+            game.text("It's a tie! Better luck next time.", getWidth()/2, 23*getHeight()/32);
         }
         else
         {
         
             if (player == game.player1)
             {
-                game.text("Player 1 won! Good job.", getWidth()/2, 25*getHeight()/32);
+                game.text("Player 1 won! Good job.", getWidth()/2, 23*getHeight()/32);
             }
             else if (player == game.player2)
             {
                 switch (player.getType())
                 {
                 case HUMAN:
-                    game.text("Player 2 won! Good job.", getWidth()/2, 25*getHeight()/32);
+                    game.text("Player 2 won! Good job.", getWidth()/2, 23*getHeight()/32);
                     break;
                 case COMPUTER:
-                    game.text("Player 2 won! Wow...the computer won.", getWidth()/2, 25*getHeight()/32);
+                    game.text("Player 2 won! Wow...the computer won.", getWidth()/2, 23*getHeight()/32);
                     break;
                 }
             }
         }
         game.text("Number of Turns: " + player.getTurn(), getWidth()/2, 27*getHeight()/32);
+        game.text("Average Time of Turn: " + game.player1.average() + " seconds", getWidth()/2, 25*getHeight()/32);
     }
+    
+    
 }

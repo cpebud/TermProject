@@ -15,6 +15,7 @@ import game.TicTacToe;
 import game.screens.MenuScreen.Menu;
 import game.screens.Screen.ScreenType;
 
+
 public class Human extends Player
 {
     /***************************************************************************
@@ -23,6 +24,7 @@ public class Human extends Player
     
     //private String name;
     //private boolean hasGone = false;
+	
 
     /***************************************************************************
      *      CONSTRUCTOR
@@ -64,4 +66,6 @@ public class Human extends Player
             }
         }
     }
+    
+    
 }
