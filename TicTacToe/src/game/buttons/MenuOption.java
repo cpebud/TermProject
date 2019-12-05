@@ -164,6 +164,9 @@ public class MenuOption extends Button
         case "Hard":
             game.updateDifficulty(Difficulty.HARD);
             break;
+        case "Impossible":
+            game.updateDifficulty(Difficulty.IMPOSSIBLE);
+            break;
         case "Settings":
             game.changeScreen(ScreenType.MENU, Menu.SETTINGS);
             break;

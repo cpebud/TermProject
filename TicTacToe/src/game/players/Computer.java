@@ -7,7 +7,7 @@
  * 					Autumn Nguyen,
  * 					Thomas Pridy
  * 
- * Copyright ï¿½ 2019. All rights reserved.
+ * Copyright © 2019. All rights reserved.
  ******************************************************************************/
 package game.players;
 
@@ -16,6 +16,7 @@ import java.util.*;
 import game.GameBoard;
 import game.TicTacToe;
 import game.TicTacToe.Difficulty;
+import game.buttons.GameTile;
 import game.buttons.GameTile.Symbol;
 import game.screens.MenuScreen.Menu;
 import game.screens.Screen.ScreenType;
@@ -73,69 +74,31 @@ public class Computer extends Player
     @Override
     public void takeTurn()
     {
-        //game.delay(1500);
         switch(difficulty)
         {
         case EASY:
-            easyTurn();
+            if (!easyTurn())
+            {
+                randomTurn();
+            }
             break;
         case MEDIUM:
+            if (!mediumTurn())
+            {
+                randomTurn();
+            }
             break;
         case HARD:
-        	
-        		//Will make sure that the bot's first move is the center tile unless the human's first move is the center tile,
-        		//in which case it is impossible for the bot to get forked.
-        		if(getTurn() == 0)
-        		{
-        			if(game.player1.getSymbol() == Symbol.EX)
-         			{
-        				
-    					if(game.getBoard().getTile(4).isEmpty())
-         				{
-         					game.getBoard().getTile(4).setTileSymbol(getSymbol());
-         					firstMove = 4;
-         				}     					
-         				else
-         					game.getBoard().getTile(0).setTileSymbol(getSymbol());
-        				
-         				
-         			}
-         			else
-         			{
-     					game.getBoard().getTile(4).setTileSymbol(getSymbol());
-     					firstMove = 4;         				
-     					
-         			}
-        		}
-        		else
-        		{
-        			if(firstMove == 4 && game.player1.getSymbol() == Symbol.EX && game.getBoard().getTile(4).getTileSymbol()== game.player1.getSymbol())
-        			{
-        	        		cantGetForkedTurn();
-        			}
-        			else
-        			{
-        				int blockFork = -1;
-        			
-        				if(!checkDiagFork())		
-        					blockFork = stopFork();
-        				else
-        					blockFork = blockDiagFork();
-        				        				
-        				if(blockFork != -1)
-        				{
-         					game.getBoard().getTile(blockFork).setTileSymbol(getSymbol());
-        				}
-        				else
-        				{
-        	        		cantGetForkedTurn();
-        				}
-        			}
-        		}
-
+        	if (!hardTurn())
+        	{
+        	    randomTurn();
+        	}
             break;
-                      
+        case IMPOSSIBLE:
+            impossibleTurn();
+            break;                      
         }
+        
         incTurn();
         
         if (!isWinner() && !game.getBoard().isFull()) 
@@ -147,6 +110,250 @@ public class Computer extends Player
             game.changeScreen(ScreenType.WIN, Menu.MAIN);
         }
        
+    }
+    
+    private void randomTurn()
+    {
+        GameBoard board = game.getBoard();
+        if (!board.isFull())
+        {
+            int random = (int)(Math.random() * GameBoard.NUM_TILES);
+            while (!board.getTile(random).isEmpty())
+            {
+                random = (int)(Math.random() * GameBoard.NUM_TILES);
+            }
+            board.getTile(random).setTileSymbol(getSymbol());
+        }
+    }
+    
+    private boolean easyTurn()
+    {
+        GameBoard board = game.getBoard();
+        GameTile[] tiles = board.getTiles();
+        
+        List<Integer> moves = new ArrayList<>();
+        
+        boolean foundMove = false;
+        if (!board.isFull())
+        {
+            for (int i = 0; i < tiles.length; i++)
+            {
+                if (tiles[i].isEmpty() && board.checkWinTile(i, false))
+                {
+                    moves.add(i);
+                    foundMove = true;
+                }
+            }
+            if (foundMove)
+            {
+                int randomIndex = (int)(Math.random() * moves.size());
+                int move = moves.get(randomIndex);
+                board.getTile(move).setTileSymbol(getSymbol());
+                
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < tiles.length; i++)
+                {
+                    if (tiles[i].isEmpty() && board.checkBlockTile(i, false))
+                    {
+                        moves.add(i);
+                        foundMove = true;
+                    }
+                }
+                if (foundMove)
+                {
+                    int randomIndex = (int)(Math.random() * moves.size());
+                    board.getTile(moves.get(randomIndex)).setTileSymbol(getSymbol());
+                    
+                    return true;
+                }
+            }
+        }
+        moves = null;
+        
+        return false;
+    }
+    
+    private boolean mediumTurn()
+    {
+        GameBoard board = game.getBoard();
+        GameTile[] tiles = board.getTiles();
+        
+        List<Integer> moves = new ArrayList<>();
+        
+        boolean foundMove = easyTurn();
+        if (!foundMove && !board.isFull())
+        {
+            for (int i = 0; i < tiles.length; i++)
+            {
+                if (tiles[i].isEmpty() && board.checkWinFork(i, false))
+                {
+                    moves.add(i);
+                    foundMove = true;
+                }
+            }
+            if (foundMove)
+            {
+                int randomIndex = (int)(Math.random() * moves.size());
+                board.getTile(moves.get(randomIndex)).setTileSymbol(getSymbol());
+                
+                return true;
+            }
+        }
+        moves = null;
+        
+        return foundMove;
+    }
+    
+    private boolean hardTurn()
+    {
+        GameBoard board = game.getBoard();
+        GameTile[] tiles = board.getTiles();
+        
+        List<Integer> moves = new ArrayList<>();
+        
+        boolean foundMove = mediumTurn();
+        if (!foundMove && !board.isFull())
+        {
+            for (int i = 0; i < tiles.length; i++)
+            {
+                if (tiles[i].isEmpty() && board.checkBlockFork(i, false))
+                {
+                    moves.add(i);
+                    foundMove = true;
+                }
+            }
+            if (foundMove)
+            {
+                int randomIndex = (int)(Math.random() * moves.size());
+                board.getTile(moves.get(randomIndex)).setTileSymbol(getSymbol());
+                
+                return true;
+            }
+        }
+        moves = null;
+        
+        return foundMove;
+    }
+    
+    private boolean impossibleTurn()
+    {
+        GameBoard board = game.getBoard();
+        GameTile[] tiles = board.getTiles();
+        
+        List<Integer> moves = new ArrayList<>();
+        
+        final int center = 4;
+        final int[] corners = {0, 2, 6, 8};
+        final int[] sides = {1, 3, 5, 7};
+        
+        if (board.isEmpty())
+        {
+            int randomIndex = (int)(Math.random() * corners.length);
+            board.getTile(corners[randomIndex]).setTileSymbol(getSymbol());
+            
+            return true;
+        }
+        
+        boolean foundMove = hardTurn();
+        if (!foundMove && !board.isFull())
+        {
+            if (tiles[center].isEmpty())
+            {
+                tiles[center].setTileSymbol(getSymbol());
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < corners.length; i++)
+                {
+                    if (tiles[corners[i]].isEmpty())
+                    {
+                        moves.add(corners[i]);
+                        foundMove = true;
+                    }
+                }
+                if (foundMove)
+                {
+                    int randomIndex = (int)(Math.random() * moves.size());
+                    board.getTile(moves.get(randomIndex)).setTileSymbol(getSymbol());
+                    
+                    return true;
+                }
+                else
+                {
+                    for (int i = 0; i < sides.length; i++)
+                    {
+                        if (tiles[sides[i]].isEmpty())
+                        {
+                            moves.add(sides[i]);
+                            foundMove = true;
+                        }
+                    }
+                    if (foundMove)
+                    {
+                        int randomIndex = (int)(Math.random() * moves.size());
+                        board.getTile(moves.get(randomIndex)).setTileSymbol(getSymbol());
+                        
+                        return true;
+                    }
+                }
+            }
+        }
+        moves = null;
+        
+        return foundMove;
+    }
+    
+    private void hardTurn1()
+    {
+        //Will make sure that the bot's first move is the center tile unless the human's first move is the center tile,
+        //in which case it is impossible for the bot to get forked.
+        if(getTurn() == 0)
+        {
+            if(game.player1.getSymbol() == Symbol.EX)
+            {
+                if(game.getBoard().getTile(4).isEmpty())
+                {
+                    game.getBoard().getTile(4).setTileSymbol(getSymbol());
+                    firstMove = 4;
+                }                       
+                else
+                    game.getBoard().getTile(0).setTileSymbol(getSymbol());
+            }
+            else
+            {
+                game.getBoard().getTile(4).setTileSymbol(getSymbol());
+                firstMove = 4;                      
+            }
+        }
+        else
+        {
+            if(firstMove == 4 && game.player1.getSymbol() == Symbol.EX && game.getBoard().getTile(4).getTileSymbol()== game.player1.getSymbol())
+            {
+                    cantGetForkedTurn();
+            }
+            else
+            {
+                int blockFork = -1;
+            
+                if(!checkDiagFork())        
+                    blockFork = stopFork();
+                else
+                    blockFork = blockDiagFork();
+                                        
+                if(blockFork != -1)
+                {
+                    game.getBoard().getTile(blockFork).setTileSymbol(getSymbol());
+                }
+                else
+                {
+                    cantGetForkedTurn();
+                }
+            }
+        }
     }
     
     public boolean checkDiagFork()
@@ -183,11 +390,11 @@ public class Computer extends Player
         int stopFork = -1;
         int corners[] = {0,2,6,8};
         
-       for(int i = 0; i<4;i++)
+       for (int i = 0; i < 4; i++)
        {
     	   int score = 0;
     	   
-    	   switch(corners[i])
+    	   switch (corners[i])
     	   {
     	   case 0: 
     		   score = scoreRow(row1, score);
@@ -206,26 +413,23 @@ public class Computer extends Player
     		   score = scoreRow(col3, score);
     		   break;
     	   }
-    	   
-    	   if(score == 2 && game.getBoard().getTile(corners[i]).getTileSymbol() == Symbol.EMPTY)
+    	   if (score == 2 && game.getBoard().getTile(corners[i]).getTileSymbol() == Symbol.EMPTY)
     	   {
     		   stopFork = corners[i];
     		   break;
-    	   }
-    		   
+    	   }   
        }
-   
         return stopFork;
         	
     }
     
     public int scoreRow(int[] tileArr, int score)
     {
-       for(int tile: tileArr)
+       for (int tile: tileArr)
 	   {
-		   if(game.getBoard().getTile(tile).getTileSymbol() == game.player1.getSymbol())
+		   if (game.getBoard().getTile(tile).getTileSymbol() == game.player1.getSymbol())
 			   score++;
-		   else if(game.getBoard().getTile(tile).getTileSymbol() == game.player2.getSymbol())
+		   else if (game.getBoard().getTile(tile).getTileSymbol() == game.player2.getSymbol())
 			   score--;
 	   }
        
@@ -245,41 +449,13 @@ public class Computer extends Player
 
 		//computer tries to win but if the move doesnt end up in a dub for pc then it
 		//plays defense
-		if(!game.player2.isWinner())
+		if (!game.player2.isWinner())
 		{
 			game.getBoard().resetTile(bestMoveWin);			
 			game.getBoard().getTile(bestMoveBlock).setTileSymbol(getSymbol());
 		}
     }
     
-    private void easyTurn()
-    {
-        GameBoard board = game.getBoard();
-        if (!board.isFull())
-        {
-            int random = (int)(Math.random() * GameBoard.NUM_TILES);
-            while (!board.getTile(random).isEmpty())
-            {
-                random = (int)(Math.random() * GameBoard.NUM_TILES);
-            }
-            board.getTile(random).setTileSymbol(getSymbol());
-        }
-    }
-    
-    public void hardEasyTurn()
-    {
-    	 if (!game.getBoard().isFull())
-         {
-             int random = (int)(Math.random() * GameBoard.NUM_TILES);
-             while (!game.getBoard().getTile(random).isEmpty())
-             {
-                 random = (int)(Math.random() * GameBoard.NUM_TILES);
-             }
-             game.getBoard().getTile(random).setTileSymbol(getSymbol());
-         }
-    }
-      
-             
     public int chooseSpace(TicTacToe aGame)
     {
     	return minimax(aGame,0, new HashMap<>());
@@ -329,14 +505,7 @@ public class Computer extends Player
     		{
     			//minimize opponent's chances
     			return potentialOutcomes.entrySet().stream().min(Map.Entry.comparingByValue()).get().getKey();
-
     		}
- 
     	}
     }
-    
-    
 }    
-
-
-

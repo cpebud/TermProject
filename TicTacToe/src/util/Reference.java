@@ -1,6 +1,6 @@
 /*******************************************************************************
- * File Name:			
- * Project:			
+ * File Name:       Reference.java
+ * Project:			Tic-Tac-Toe Game
  * 
  * Designer(s):		Garrett Cross,
  * 					Omar Kermiche,
