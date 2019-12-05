@@ -112,7 +112,7 @@ public class Computer extends Player
        
     }
     
-    private void randomTurn()
+    public void randomTurn()
     {
         GameBoard board = game.getBoard();
         if (!board.isFull())
