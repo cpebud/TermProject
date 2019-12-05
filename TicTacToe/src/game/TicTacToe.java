@@ -233,7 +233,7 @@ public class TicTacToe extends PApplet
                         }
                         else if (startofTurnTime > endofTurnTime) 
                         {
-                        	getCurrentPlayer().addTime(60 - (endofTurnTime - startofTurnTime));
+                        	getCurrentPlayer().addTime(60 - (startofTurnTime - endofTurnTime));
                         	//println(60 - (startofTurnTime - endofTurnTime));
                         }
                         else
@@ -373,11 +373,14 @@ public class TicTacToe extends PApplet
     {
     	ControlP5 cp5 = new ControlP5(this);
     	slider = cp5.addSlider("Time")
-    	        .setValue(3)
+    	        .setValue(30)
     	        .setPosition(1*Reference.WIDTH/3 - 20, 2*Reference.HEIGHT/5)
     	        .setRange(3,60)
-    	        .setSliderMode(Slider.FLEXIBLE)
+    	        .setSliderMode(Slider.FIX)
     	        .setSize(250, 30)
+    	        .setColorValue(getTheme().getFontColor())
+    	        .setColorBackground(getTheme().getFontHighlight())
+    	        .setColorForeground(getTheme().getFontHover())
     	        ;
     	slider.hide();
     }
@@ -684,8 +687,8 @@ public class TicTacToe extends PApplet
 	        {
 	        	if ((endofTurnTime - startofTurnTime) >= sliderValue - 1)
 	        	{
-	        		getCurrentPlayer().addTime(endofTurnTime - startofTurnTime);
-	        		//println(Float.toString(endofTurnTime - startofTurnTime));
+	        		getCurrentPlayer().addTime((endofTurnTime - startofTurnTime) + 1);
+	        		//println(endofTurnTime - startofTurnTime);
 	        		getCurrentPlayer().randomTurn();
 	        		getCurrentPlayer().takeTurn();
 	        	}
@@ -694,8 +697,8 @@ public class TicTacToe extends PApplet
 	        {
 	        	if ((60 - (startofTurnTime - endofTurnTime)) >= sliderValue - 1)
 	        	{
-	        		getCurrentPlayer().addTime(60 - (startofTurnTime - endofTurnTime));
-	        		//println(Float.toString(60 - (endofTurnTime - startofTurnTime)));
+	        		getCurrentPlayer().addTime(60 - ((startofTurnTime - endofTurnTime) + 1));
+	        		//println(60 - (endofTurnTime - startofTurnTime));
 	        		getCurrentPlayer().randomTurn();
 	        		getCurrentPlayer().takeTurn();
 	        	}
