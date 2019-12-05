@@ -60,7 +60,7 @@ public class TicTacToe extends PApplet
      **************************************************************************/
     
     /*   Current Theme   */
-    private Theme currentTheme = Theme.RETRO;
+    private Theme currentTheme = Theme.CHALK;
 
     /*   Current Screens   */
     private Stack<ScreenType> currentScreens = new Stack<>();
