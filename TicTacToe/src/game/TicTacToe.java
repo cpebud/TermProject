@@ -222,25 +222,8 @@ public class TicTacToe extends PApplet
                     {
                         if (getSoundsOn()) { click.trigger(); }
                         tile.setTileSymbol(currentPlayer.getSymbol());
-                        endofTurnTime = second();
-                        //println("End of Turn Time:");
-                    	//println(endofTurnTime);
-                    	
-                        if (startofTurnTime < endofTurnTime)
-                        {
-                        	getCurrentPlayer().addTime(endofTurnTime - startofTurnTime);
-                        	//println(endofTurnTime - startofTurnTime);
-                        }
-                        else if (startofTurnTime > endofTurnTime) 
-                        {
-                        	getCurrentPlayer().addTime(60 - (startofTurnTime - endofTurnTime));
-                        	//println(60 - (startofTurnTime - endofTurnTime));
-                        }
-                        else
-                        {
-                        	getCurrentPlayer().addTime((float)0.5);
-                        	//println(0.5);
-                        }
+                        endofTurnTime = millis();
+                        getCurrentPlayer().addTime((endofTurnTime - startofTurnTime)/1000);
                         currentPlayer.takeTurn();
                     }
                 }
@@ -289,9 +272,7 @@ public class TicTacToe extends PApplet
             if (getCurrentPlayer().getType() == PlayerType.COMPUTER)
             {
                 getCurrentPlayer().takeTurn();
-                startofTurnTime = second();
-                //println("Start of Turn Time:");
-            	//println(startofTurnTime);
+                startofTurnTime = millis();
             }
             break;
         case WIN:
@@ -678,30 +659,16 @@ public class TicTacToe extends PApplet
     
     private void checkTime()
     {
-    	endofTurnTime = second();
+    	endofTurnTime = millis();
     	
         if (currentPlayer.getType() == PlayerType.HUMAN)
         {
-	        if (startofTurnTime < endofTurnTime)
-	        {
-	        	if ((endofTurnTime - startofTurnTime) >= sliderValue - 1)
-	        	{
-	        		getCurrentPlayer().addTime((endofTurnTime - startofTurnTime) + 1);
-	        		//println(endofTurnTime - startofTurnTime);
-	        		getCurrentPlayer().randomTurn();
-	        		getCurrentPlayer().takeTurn();
-	        	}
-	        }
-	        else if (startofTurnTime > endofTurnTime)
-	        {
-	        	if ((60 - (startofTurnTime - endofTurnTime)) >= sliderValue - 1)
-	        	{
-	        		getCurrentPlayer().addTime(60 - ((startofTurnTime - endofTurnTime) + 1));
-	        		//println(60 - (endofTurnTime - startofTurnTime));
-	        		getCurrentPlayer().randomTurn();
-	        		getCurrentPlayer().takeTurn();
-	        	}
-	        }
+        	if ((endofTurnTime - startofTurnTime)/1000 > sliderValue)
+        	{
+        		getCurrentPlayer().addTime(sliderValue);
+        		getCurrentPlayer().randomTurn();
+        		getCurrentPlayer().takeTurn();
+        	}
 	        
         }
     }

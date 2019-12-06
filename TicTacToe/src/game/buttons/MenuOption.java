@@ -133,7 +133,9 @@ public class MenuOption extends Button
             game.changeScreen(ScreenType.TIME, Menu.MAIN);
             game.getBoard().clear();
             game.getPlayer1().resetTurn();
+            game.getPlayer1().clearTurns();
             game.getPlayer2().resetTurn();
+            game.getPlayer2().clearTurns();
             game.assignPlayerSymbol();
             break;
         case "Continue Game":

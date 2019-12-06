@@ -163,17 +163,13 @@ public abstract class Player
     	float sum = 0;
         for (int i = 0; i < times.length; i++) 
         {
-        	if (times[i] == 0.0) break;
+        	if (times[i] == 0) break;
             sum += times[i];
-            //game.println("Index:");
-            //game.println(Integer.toString(i));
-            //game.println("Value:");
-            //game.println(Float.toString(times[i]));
         }
-        //game.println("Turns:");
-        //game.println(Float.toString(game.getPlayer1().getTurn()));
+        
         return sum/game.getPlayer1().getTurn();
     }
+    
     
     public void randomTurn()
     {
@@ -191,6 +187,14 @@ public abstract class Player
     	
     }
     
+    public void clearTurns()
+    {
+        for (int i = 0; i < times.length; i++) 
+        {
+        	times[i] = 0;
+        }
+        
+    }
     /***************************************************************************
      *      ENUMERATOR
      **************************************************************************/
